@@ -1,0 +1,24 @@
+<header>
+    <div class="container">
+        <div class="logo">
+            <img src="assets/img/logo-333.png" alt="ErCaliente Logo">
+            <h1><span class="word">Er</span><span class="quote">'</span>Caliente</h1>
+        </div>
+
+        <nav>
+            <ul [class.active]="isMenuOpen">
+                <li><a href="#inicio"   (click)="closeMenu()"> Inicio   </a></li>
+                <li><a href="#menu"     (click)="closeMenu()"> Menú     </a></li>
+                <li><a href="#nosotros" (click)="closeMenu()"> Nosotros </a></li>
+                <li><a href="#contacto" (click)="closeMenu()"> Contacto </a></li>
+            </ul>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars" (click)="toggleMobileMenu()"></i>
+            </div>
+        </nav>
+    </div>
+</header>
