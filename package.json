@@ -21,6 +21,7 @@
     "@angular/platform-server": "^19.2.14",
     "@angular/router": "^19.2.14",
     "@angular/ssr": "^19.2.15",
+    "@ngx-translate/core": "^16.0.4",
     "@tailwindcss/postcss": "^4.1.11",
     "daisyui": "^5.0.46",
     "express": "^4.21.2",
