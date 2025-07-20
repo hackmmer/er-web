@@ -36,6 +36,6 @@ export class HeaderComponent {
   }
 
   get theme() : string {
-    return this.themeService.currentTheme as string;
+    return this.themeService.getTheme() as string;
   }
 }
