@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,15 @@ import { Component, HostListener } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  isMenuOpen:boolean = false;
+  isMenuOpen:boolean;
+  itemsCounter: number;
+  itemsSubtotal: number;
+
+  constructor(public themeService: ThemeService) {
+    this.isMenuOpen = false;
+    this.itemsCounter = 0;
+    this.itemsSubtotal = 0;
+  }
 
   toggleMobileMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -20,5 +29,13 @@ export class HeaderComponent {
   @HostListener('window:scroll', [])
   onScroll() {
     this.isMenuOpen = false;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+
+  get theme() : string {
+    return this.themeService.currentTheme as string;
   }
 }
