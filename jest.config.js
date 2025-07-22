@@ -20,9 +20,15 @@ module.exports = {
   },
   
   // Transformación de archivos
-  // transform: {
-  //   '^.+\\.(ts|js|html|svg)$': 'jest-preset-angular',
-  // },
+  transform: {
+    '^.+\\.(ts|js|mjs|html|svg)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      }
+    ],
+  },
   
   // Extensión de archivos a testear
   moduleFileExtensions: ['ts', 'js', 'html'],
