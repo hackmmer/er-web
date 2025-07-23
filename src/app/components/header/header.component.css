@@ -1,0 +1,27 @@
+:host
+{
+    --red-spicy: #FF3B30;
+    --yellow-mustard: #FFD60A;
+}
+
+.logo {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--red-spicy);
+}
+
+.logo h1 .word {
+    color: var(--yellow-mustard)
+}

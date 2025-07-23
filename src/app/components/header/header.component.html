@@ -1,0 +1,74 @@
+<header>
+    <div class="navbar bg-base-100 shadow-sm justify-between">
+        <!-- Logo -->
+        <div class="flex-none ms-10">
+            <a href="#" class="logo">
+                <img src="assets/img/logo-333.png" alt="ErCaliente Logo">
+                <h1><span class="word">Er</span><span class="quote text-base-content">'</span>Caliente</h1>
+            </a>
+        </div>
+        <!-- End Logo -->
+
+        <!-- Links & Misc-->
+        <div class="flex-none me-10">
+            <!-- Links -->
+            <ul class="menu menu-horizontal px-1">
+                <li><a>Link</a></li>
+                <li><a>Link 2</a></li>
+                <li><a>Link 3</a></li>
+                <li><a>Link 4</a></li>
+            </ul>
+            <!-- Theme switcher -->
+            <label class="toggle text-base-content ms-3">
+                <input type="checkbox" [value]="theme" class="theme-controller" (click)="toggleTheme()" />
+                <svg aria-label="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></g></svg>
+                <svg aria-label="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></g></svg>
+            </label>
+            <!-- Market cart -->
+            <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                <div class="indicator">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /> </svg>
+                @if (itemsCounter > 0) {
+                    <span class="badge badge-sm indicator-item btn-circle border border-base-content">{{ itemsCounter }}</span>
+                }
+                </div>
+            </div>
+            <div
+                tabindex="0"
+                class="card card-compact dropdown-content bg-base-100 z-1 mt-3 w-52 shadow border border-base-content">
+                <div class="card-body">
+                <span class="text-lg font-bold">{{ itemsCounter }} Items</span>
+                <span class="text-info">Subtotal: &euro; {{ itemsSubtotal }}</span>
+                <div class="card-actions">
+                    <button class="btn btn-primary btn-block">View cart</button>
+                </div>
+                </div>
+            </div>
+            </div>
+            <!-- Profile -->
+            <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar border border-base-content">
+                <div class="w-10 rounded-full">
+                <img
+                    alt="Tailwind CSS Navbar component"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                </div>
+            </div>
+            <ul
+                tabindex="0"
+                class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-base-content">
+                <li>
+                <a class="justify-between">
+                    Profile
+                    <span class="badge">New</span>
+                </a>
+                </li>
+                <li><a>Settings</a></li>
+                <li><a>Logout</a></li>
+            </ul>
+            </div>
+        </div>
+        <!-- End Links & Misc -->
+    </div>
+</header>
