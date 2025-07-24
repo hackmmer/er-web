@@ -5,23 +5,39 @@
 }
 
 .logo {
-    display: grid;
+    display: flex;
     align-items: center;
     justify-items: center;
     justify-content: center;
 }
 
 .logo img {
-    max-width: 64px;
-    max-height: 64px;
+    width: 40px;
+    height: 40px;
+    padding: 2px;
 }
 
 .logo h1 {
     font-size: 1.8rem;
     font-weight: 800;
     color: var(--red-spicy);
+    margin-left: 5px;
 }
 
 .logo h1 .word {
     color: var(--yellow-mustard)
+}
+
+.mr-6{
+    margin-right: 6px;
+}
+
+.right-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.p-0{
+    padding: 0 !important;
 }

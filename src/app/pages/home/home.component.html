@@ -1,1 +1,32 @@
-<app-header></app-header>
+<section id="inicio" class="flame-bg py-20">
+    <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-12 lg:mb-0">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-dark">
+                Bocatas que <span class="text-primary">encienden</span> tus sentidos
+            </h1>
+            <p class="text-xl mb-8 text-gray-700">
+                En Er'Caliente no solo servimos bocatas, creamos experiencias que te harán sudar. 
+                Ingredientes frescos, combinaciones explosivas y un toque de picante que nunca olvidarás.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <button (click)="go_menu()" class="btn btn-primary btn-lg">
+                    Ver Menú Explícito <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button class="btn btn-outline btn-secondary btn-lg">
+                    Pedir para Llevar <i class="fas fa-motorcycle ml-2"></i>
+                </button>
+            </div>
+        </div>
+        <div class="lg:w-1/2 flex justify-center">
+            <div class="relative">
+                <div class="bg-secondary rounded-full w-80 h-80 flex items-center justify-center shadow-xl">
+                    <img src="assets/img/srpepito.png" 
+                            alt="Bocata Er'Caliente" class="w-64 h-64 object-cover rounded-lg shadow-lg border-4 border-white">
+                </div>
+                <div class="absolute -top-6 -right-6 bg-primary text-white py-2 px-6 rounded-full font-bold text-lg transform rotate-12 shadow-lg">
+                    ¡Muy Picante!
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

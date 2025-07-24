@@ -1,9 +1,11 @@
 import { Component, HostListener } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 
+import { RouterLink, Router } from '@angular/router';
+
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -12,23 +14,14 @@ export class HeaderComponent {
   itemsCounter: number;
   itemsSubtotal: number;
 
-  constructor(public themeService: ThemeService) {
+  constructor(public themeService: ThemeService, private router: Router) {
     this.isMenuOpen = false;
     this.itemsCounter = 0;
     this.itemsSubtotal = 0;
   }
 
-  toggleMobileMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  closeMenu() {
-    this.isMenuOpen = false;
-  }
-
-  @HostListener('window:scroll', [])
-  onScroll() {
-    this.isMenuOpen = false;
+  go_menu(){
+    this.router.navigate(['menu'])
   }
 
   toggleTheme() {

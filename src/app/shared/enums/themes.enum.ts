@@ -1,4 +1,4 @@
 export const enum ThemeEnum {
   THEME_DARK  = "dark",
-  THEME_LIGHT = "retro"
+  THEME_LIGHT = "light"
 }
