@@ -5,10 +5,10 @@
                 4<span class="text-primary">0</span>4
             </h1>
             <p class="text-2xl md:text-3xl mb-6">
-                ¡Ups! Parece que este bocata se ha quemado en la parrilla
+                {{'not_found.title' | translate}}
             </p>
             <div class="badge badge-primary badge-lg text-xl py-4 px-6 pulse">
-                <i class="fas fa-fire mr-2"></i> PÁGINA NO ENCONTRADA
+                <i class="fas fa-fire mr-2"></i> {{'not_found.not_found' | translate}}
             </div>
         </div>
         
@@ -18,31 +18,29 @@
                         alt="Bocata quemado" class="w-48 h-48 object-cover rounded-lg shadow-lg border-4 border-white">
             </div>
             <div class="absolute -top-6 -right-6 bg-primary text-white py-2 px-6 rounded-full font-bold text-lg transform rotate-12 shadow-lg">
-                ¡Demasiado caliente!
+                {{'others.too_hot' | translate}}
             </div>
         </div>
         
         <div class="max-w-2xl text-center mb-12">
             <h2 class="text-3xl font-bold mb-4 text-dark">
-                Algo salió mal en la cocina...
+                {{'not_found.wrong' | translate}}
             </h2>
             <p class="text-xl mb-6">
-                Parece que la página que buscas ha desaparecido como el último bocata en la hora del almuerzo. 
-                Mientras nuestros chefs investigan este misterio culinario, ¿por qué no pruebas una de estas deliciosas opciones?
+                {{'not_found.details' | translate}}
             </p>
         </div>
         
         <div class="p-8 rounded-xl shadow-lg w-full max-w-3xl border-2 border-dashed border-primary">
             <h3 class="text-2xl font-bold mb-4 text-center text-dark">
-                ¿Te perdiste buscando algo picante?
+                {{'not_found.lost' | translate}}
             </h3>
             <p class="text-center mb-6">
-                "En Er'Caliente, hasta nuestros errores son sabrosos. Mientras solucionamos este problema, 
-                disfruta de un 10% de descuento en tu próxima visita con este código:"
+                {{'not_found.details_2' | translate}}
             </p>
             <div class="flex justify-center mb-6">
-                <div class="bg-primary text-white py-3 px-8 rounded-full font-bold text-xl">
-                    <i class="fas fa-ticket-alt mr-2"></i> ERROR404-CALIENTE
+                <div routerLink="" class="bg-primary text-white py-3 px-8 rounded-full font-bold text-xl">
+                    <i class="fas mr-2"></i> {{'title' | translate}}
                 </div>
             </div>
         </div>
