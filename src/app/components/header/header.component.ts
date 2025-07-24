@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 
 import { RouterLink, Router } from '@angular/router';
