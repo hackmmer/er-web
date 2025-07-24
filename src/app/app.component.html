@@ -1,6 +1,9 @@
-<div class="h-full">
-    <app-header></app-header>
-    <div class="h-full">
-        <router-outlet></router-outlet>
-    </div>
+<div class="h-screen flex flex-col">
+  <!-- Header fijo en la parte superior -->
+  <app-header class="fixed top-0 left-0 right-0 z-50"></app-header>
+  
+  <!-- Contenedor del contenido con margen superior -->
+  <div class="flex-grow mt-16 pt-4 overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
 </div>

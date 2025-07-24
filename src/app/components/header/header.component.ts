@@ -20,10 +20,6 @@ export class HeaderComponent {
     this.itemsSubtotal = 0;
   }
 
-  go_menu(){
-    this.router.navigate(['menu'])
-  }
-
   toggleTheme() {
     this.themeService.toggleTheme();
   }
