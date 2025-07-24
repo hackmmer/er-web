@@ -1,4 +1,7 @@
 export const environment = {
     production: false,
-    apiURL: ''
+    api: {
+        host: "https://ercaliente.onrender.com",
+        url: "https://er-backend-xlfc.onrender.com/api",
+    }
 };

@@ -14,7 +14,7 @@ export enum EnumLangs {
   DE = "de",
 }
 
-interface IUser {
+export interface IUser {
   authProviders: {
     local?: {
       password: string;
