@@ -1,0 +1,35 @@
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.burning-text {
+    position: relative;
+    display: inline-block;
+}
+
+.burning-text:after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: radial-gradient(ellipse at center, rgba(230,57,70,0.8) 0%, rgba(255,255,255,0) 70%);
+    z-index: -1;
+}

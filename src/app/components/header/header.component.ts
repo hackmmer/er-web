@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ThemeService } from '../../services/theme.service';
+import { ThemeService } from '../../common/themes/theme.service';
 
 import { RouterLink, Router } from '@angular/router';
 
