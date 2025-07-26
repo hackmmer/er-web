@@ -1,11 +1,9 @@
-interface SIngredient {
+export interface SIngredient {
   name: string;
 
   price: number;
 
   description?: string;
-
-  imageUrl?: string;
 
   isAvailable: boolean;
 
@@ -18,7 +16,7 @@ interface SIngredient {
   isVegan: boolean;
 }
 
-interface IProduct {
+export interface IProduct {
   name: string;
 
   price: number;

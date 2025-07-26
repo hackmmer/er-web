@@ -9,6 +9,7 @@ export const locale = {
     menu:{
       'title':'Nuestro Menú',
       'details':'Bocatas creados para despertar tus sentidos. Cada mordisco es una nueva experiencia que te dejará con ganas de más.',
+      'ingredients':'Ingredientes'
     },
     not_found:{
       'title':'¡Ups! Parece que este bocata se ha quemado en la parrilla',
