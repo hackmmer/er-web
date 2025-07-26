@@ -24,13 +24,15 @@
                     </span>
                   </div>
                   <p class="">{{product.description}}</p>
-                  <h3 class="text-2xl">{{'menu.ingredients' | translate}}</h3>
-                  @for (ingredient of product.ingredients; track $index) {
-                    <div class="mb-4 flex justify-between">
-                      <p class="">{{ingredient?.name}}</p>
-                      <p class="">{{ingredient?.price | currency:"EUR"}}</p>
-                    </div>
+                  @if (product.ingredients.lenght>0){
+                    <h3 class="text-2xl">{{'menu.ingredients' | translate}}</h3>
+                    @for (ingredient of product.ingredients; track $index) {
+                      <div class="mb-4 flex justify-between">
+                        <p class="">{{ingredient?.name}}</p>
+                        <p class="">{{ingredient?.price | currency:"EUR"}}</p>
+                      </div>
 
+                    }
                   }
                   <div class="flex justify-between items-center">
                       <span class="text-xl font-bold text-primary">{{product.price | currency: "EUR"}}</span>
