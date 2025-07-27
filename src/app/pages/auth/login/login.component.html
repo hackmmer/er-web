@@ -1,0 +1,65 @@
+<button class="btn btn-block" (click)="showLoginForm = true">LogIn</button>
+
+@if (showLoginForm) {
+  <!-- Fondo -->
+  <div class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center">
+    <!-- Botón de cierre -->
+    <button class="absolute top-7 right-7 btn btn-sm btn-circle bg-base-300/80 backdrop-blur-sm" (click)="showLoginForm = false">
+      ✕
+    </button>
+    
+    <!-- Formulario -->
+    <div class="w-md bg-base-100/70 backdrop-blur-md border-t-4 border-gray-600/50 rounded-md shadow-xl px-8 py-6">
+      <h1 class="text-3xl font-semibold text-center mb-6">@if (!isSignUpForm) { Login } @else { Register }</h1>
+      <form class="space-y-4 px-2">
+        @if (isSignUpForm)
+        {
+          <div>
+            <label class="label">
+              <span class="text-base label-text">Name</span>
+            </label>
+            <input type="text" placeholder="Name" class="w-full input input-bordered bg-base-200/70" />
+          </div>
+        }
+        <div>
+          <label class="label">
+            <span class="text-base label-text">Email</span>
+          </label>
+          <input type="text" placeholder="Email Address" class="w-full input input-bordered bg-base-200/70" />
+        </div>
+        <div>
+          <label class="label">
+            <span class="text-base label-text">Password</span>
+          </label>
+          <input type="password" placeholder="Enter Password" class="w-full input input-bordered bg-base-200/70" />
+        </div>
+        @if (!isSignUpForm)
+        {
+          <div class="flex justify-between mt-5 mb-2">
+            <p class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right cursor-pointer" (click)="toggleSignUp()">
+              Don't have an account yet?
+            </p>
+
+            <a href="#" class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right">
+              Forget Password?
+            </a>
+          </div>
+        } @else {
+          <div class="flex mt-5 mb-2">
+            <p class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right cursor-pointer" (click)="toggleSignUp()">
+              SignIn
+            </p>
+          </div>
+        }
+        <div class="flex justify-center m-1">
+          <button class="btn bg-base-300/80 backdrop-blur-sm btn-sm w-24 py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+          @if (!isSignUpForm) { Login } @else { SignUp }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

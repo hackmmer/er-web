@@ -45,4 +45,16 @@ export class AuthService extends BaseApi {
     }))
   }
 
+  private getToken(): string | null {
+    if (typeof window !== 'undefined') {
+      try { return localStorage.getItem(this.access_token); } 
+      catch {}
+    }
+    return '';
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
 }
