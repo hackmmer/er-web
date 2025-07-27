@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
-import { IUser } from '../../models/user';
+import { IUser } from '@models/user';
 import { Observable, tap } from 'rxjs';
 
 export interface LoginCredentials {
