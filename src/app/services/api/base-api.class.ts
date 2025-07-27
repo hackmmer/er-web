@@ -1,32 +1,45 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface ApiOptions {
-    endpoint?: string,
-    headers?: HttpHeaders | Record<string, string | string[]>,
-    params?: HttpParams | Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>>;
-    body?: any | null;
+  endpoint?: string;
+  headers?: HttpHeaders | Record<string, string | string[]>;
+  params?: HttpParams | Record<string, any>;
+  body?: any | null;
 }
 
-export abstract class BaseApi {
-    readonly baseUrl = environment.api.url
-    readonly fullUrl: string;
+export interface CRUD<T> {
+  create?(data: T): Observable<T | any>;
+  findAll?(): Observable<(T | any)[] | any>;
+  findOne?(id: string): Observable<T | any>;
+  update?(id: string, data: T): Observable<T | any>;
+  remove?(id: string): Observable<T | any>;
+}
 
-    constructor(private http: HttpClient, protected endpoint = '') {
-        this.fullUrl = `${this.baseUrl}/${endpoint}`
-    }
+export abstract class BaseApi{
+  readonly baseUrl = environment.api.url;
+  readonly fullUrl: string;
 
-    get<T>(options: ApiOptions) {
-        return this.http.get<T>(`${this.fullUrl}/${options.endpoint ?? ''}`, {
-            headers: options?.headers,
-            params: options?.params,
-        })
-    }
+  constructor(private http: HttpClient, protected endpoint = '') {
+    this.fullUrl = `${this.baseUrl}/${endpoint}`;
+  }
 
-    post<T>(options: ApiOptions) {
-        return this.http.post<T>(`${this.fullUrl}/${options.endpoint ?? ''}`, options.body, {
-            headers: options?.headers,
-            params: options?.params
-        })
-    }
+  get<T = any>(options?: ApiOptions) {
+    return this.http.get<T>(`${this.fullUrl}/${options?.endpoint ?? ''}`, {
+      headers: options?.headers,
+      params: options?.params,
+    });
+  }
+
+  post<T = any>(options?: ApiOptions) {
+    return this.http.post<T>(
+      `${this.fullUrl}/${options?.endpoint ?? ''}`,
+      options?.body ?? '',
+      {
+        headers: options?.headers,
+        params: options?.params,
+      }
+    );
+  }
 }

@@ -8,12 +8,15 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          @for (product of products; track $index) {
+          @for (product of products; track $index; ) {
             @if (product.isAvailable) {
               <div class="menu-item card image-full bg-base-100 shadow-xl transition-all duration-300">
-                <figure>
-                  <img [src]="product.imageUrl"/>
-                </figure>
+                @let image = product.imageUrl;
+                @if(image){
+                  <figure class="relative">
+                    <img fill priority [ngSrc]="image" />
+                  </figure>
+                }
                 <div class="card-body">
                   <div class="flex justify-between items-start">
                     <h3 class="card-title text-2xl font-bold">{{product.name}}</h3>
@@ -24,7 +27,7 @@
                     </span>
                   </div>
                   <p class="">{{product.description}}</p>
-                  @if (product.ingredients.lenght>0){
+                  @if (product.ingredients.length>0){
                     <h3 class="text-2xl">{{'menu.ingredients' | translate}}</h3>
                     @for (ingredient of product.ingredients; track $index) {
                       <div class="mb-4 flex justify-between">

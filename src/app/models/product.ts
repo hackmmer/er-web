@@ -1,4 +1,4 @@
-export interface SIngredient {
+export interface IIngredient {
   name: string;
 
   price: number;
@@ -31,7 +31,7 @@ export interface IProduct {
 
   category: string;
 
-  ingredients: SIngredient[];
+  ingredients: IIngredient[];
 
   isVegetarian?: boolean;
 
