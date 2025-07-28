@@ -28,7 +28,28 @@ export const locale = {
       'settings':'Ajustes',
       'logout':'Salir',
       'signIn':'Iniciar sesión',
-      'signUp':'Crear sesión',
+      'signUp':'Crear cuenta',
+    },
+    login: {
+      'enter': 'Entrar',
+      'register': "Registrarse",
+      'firstname': 'Nombre',
+      'lastname': 'Apellidos',
+      'email': 'Correo electrónico',
+      'password': 'Contraseña',
+      'repassword': 'Repita su contraseña',
+      'haventaccount': '¿No tiene una cuenta aún?',
+      'forgetpassword': '¿Olvidaste tu contraseña?',
+
+      /* ERRRORS */
+      'err_firstname_req': 'El nombre es obligatorio.',
+      'err_lastname_req': 'Los apellidos son obligatorios.',
+      'err_email_req': 'El correo electrónico es obligatorio.',
+      'err_email_invalid': 'El correo electrónico no es válido.',
+      'err_password_req': 'La contraseña es obligatoria.',
+      'err_password_minlen': 'La contraseña debe tener al menos 6 caracteres.',
+      'err_repassword_match': 'Las contraseñas no coinciden.',
+      'err_repassword_req': 'La confirmación de la contraseña es obligatoria.'
     },
     others:{
       'hot':'Caliente',
