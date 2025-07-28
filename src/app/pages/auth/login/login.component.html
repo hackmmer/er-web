@@ -1,62 +1,153 @@
-<button class="btn btn-block" (click)="showLoginForm = true">LogIn</button>
+<button 
+    class="btn btn-block hover:bg-primary/20 hover:text-primary-content transition-all duration-300 ease-in-out"
+    (click)="showLoginForm = true">
+    LogIn
+</button>
 
 @if (showLoginForm) {
   <!-- Fondo -->
   <div class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center">
     <!-- Botón de cierre -->
-    <button class="absolute top-7 right-7 btn btn-sm btn-circle bg-base-300/80 backdrop-blur-sm" (click)="showLoginForm = false">
-      ✕
+    <button 
+        class="absolute top-7 right-7 btn btn-sm btn-circle bg-base-300/80 backdrop-blur-sm hover:bg-error/80 hover:rotate-90 hover:scale-110 transition-all duration-300"
+        (click)="showLoginForm = false">
+        ✕
     </button>
     
     <!-- Formulario -->
-    <div class="w-md bg-base-100/70 backdrop-blur-md border-t-4 border-gray-600/50 rounded-md shadow-xl px-8 py-6">
-      <h1 class="text-3xl font-semibold text-center mb-6">@if (!isSignUpForm) { Login } @else { Register }</h1>
-      <form class="space-y-4 px-2">
+    <div class="w-md bg-base-100/70 backdrop-blur-md border-t-4 border-gray-600/50 rounded-md shadow-xl px-8 py-6 hover:shadow-2xl transition-shadow duration-300">
+      <h1 class="text-3xl font-semibold text-center mb-6 transition-colors duration-300 hover:text-primary">
+        @if (!isSignUpForm) { Login } @else { Register }
+      </h1>
+
+      <!-- Error Section -->
+      @if (errorMessage) {
+        <div class="alert alert-error mb-4 errors-animate">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+
+      <form class="space-y-4 px-2" [formGroup]="authForm" (submit)="onSubmit()">
         @if (isSignUpForm)
         {
           <div>
             <label class="label">
-              <span class="text-base label-text">Name</span>
+              <span class="text-base label-text transition-colors duration-300 hover:text-accent">Name</span>
             </label>
-            <input type="text" placeholder="Name" class="w-full input input-bordered bg-base-200/70" />
+            <input 
+                type="text" 
+                placeholder="Enter Name"
+                formControlName="firstName"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+            @if (authForm.get('firstName')?.invalid && authForm.get('firstName')?.touched) {
+              <div class="text-error text-xs mt-1">Name is required.</div>
+            }
+          </div>
+          <div>
+          <label class="label">
+            <span class="text-base label-text transition-colors duration-300 hover:text-accent">Lastname</span>
+            </label>
+            <input 
+                type="text" 
+                placeholder="Enter Lastname"
+                formControlName="lastName"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+            @if (authForm.get('lastName')?.invalid && authForm.get('lastName')?.touched) {
+              <div class="text-error text-xs mt-1">Lastname is required.</div>
+            }
           </div>
         }
         <div>
           <label class="label">
-            <span class="text-base label-text">Email</span>
+            <span class="text-base label-text transition-colors duration-300 hover:text-accent">Email</span>
           </label>
-          <input type="text" placeholder="Email Address" class="w-full input input-bordered bg-base-200/70" />
+          <input 
+              type="text" 
+              placeholder="Email Address"
+              formControlName="email"
+              class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+          @if (authForm.get('email')?.invalid && authForm.get('email')?.touched) {
+            <div class="text-error text-xs mt-1">
+              @if (authForm.get('email')?.errors?.['required']) { Email is required. }
+              @if (authForm.get('email')?.errors?.['email']) { Please enter a valid email. }
+            </div>
+          }
         </div>
         <div>
           <label class="label">
-            <span class="text-base label-text">Password</span>
+            <span class="text-base label-text transition-colors duration-300 hover:text-accent">Password</span>
           </label>
-          <input type="password" placeholder="Enter Password" class="w-full input input-bordered bg-base-200/70" />
+          <input 
+              type="password" 
+              placeholder="Enter Password"
+              formControlName="password"
+              class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+          @if (authForm.get('password')?.invalid && authForm.get('password')?.touched) {
+            <div class="text-error text-xs mt-1">
+              @if (authForm.get('password')?.errors?.['required']) { Password is required. }
+              @if (authForm.get('password')?.errors?.['minlength']) { Password must be at least 6 characters. }
+            </div>
+          }
         </div>
-        @if (!isSignUpForm)
-        {
+        @if (isSignUpForm) {
+          <div>
+            <label class="label">
+              <span class="text-base label-text transition-colors duration-300 hover:text-accent">Re-type Password</span>
+            </label>
+            <input 
+                type="password" 
+                placeholder="Repeat Password" 
+                formControlName="repassword"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+            
+            @if (authForm.get('repassword')?.touched && authForm.get('repassword')?.errors?.['required']) {
+              <div class="text-error text-xs mt-1">Password confirmation is required.</div>
+            }
+            
+            @if (authForm.errors?.['passwordMismatch'] && authForm.get('repassword')?.touched) {
+              <div class="text-error text-xs mt-1">The passwords don't match.</div>
+            }
+          </div>
+        }
+        @if (!isSignUpForm) {
           <div class="flex justify-between mt-5 mb-2">
-            <p class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right cursor-pointer" (click)="toggleSignUp()">
+            <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
+               (click)="toggleSignUp()">
               Don't have an account yet?
             </p>
 
-            <a href="#" class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right">
+            <a href="#" class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300">
               Forget Password?
             </a>
           </div>
         } @else {
           <div class="flex mt-5 mb-2">
-            <p class="text-xs text-gray-600 hover:underline hover:text-base-content block text-right cursor-pointer" (click)="toggleSignUp()">
+            <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
+               (click)="toggleSignUp()">
               SignIn
             </p>
           </div>
         }
         <div class="flex justify-center m-1">
-          <button class="btn bg-base-300/80 backdrop-blur-sm btn-sm w-24 py-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-            </svg>
-          @if (!isSignUpForm) { Login } @else { SignUp }
+          <button 
+              type="submit"
+              class="btn bg-base-300/80 backdrop-blur-sm btn-sm w-24 py-4 hover:bg-primary/80 hover:text-primary-content hover:scale-105 hover:shadow-lg transition-all duration-300 group"
+              [disabled]="isLoading">
+            @if (isLoading) {
+              <span class="loading loading-spinner loading-xs"></span>
+            } @else {
+              <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  class="h-5 w-5 mr-2 group-hover:rotate-[20deg] transition-transform duration-300" 
+                  viewBox="0 0 20 20" 
+                  fill="currentColor">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+              </svg>
+            }
+            @if (!isSignUpForm) { Login } @else { SignUp }
           </button>
         </div>
       </form>
