@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { AuthService, LoginCredentials, RegisterCredentials } from '../../../services/api/auth.service';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +17,9 @@ export class LoginComponent {
   isLoading: boolean = false;
   errorMessage: string | null = null; // This can be used for debug at try to login or crean an account. Ej: errorMessage = res.message
   authSub: Subscription | null = null;
+  showPassword: boolean = false;
 
-  constructor(private authService: AuthService, private fb: FormBuilder) {
+  constructor(private authService: AuthService, private fb: FormBuilder, private translate: TranslateService) {
     this.authForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -56,6 +57,10 @@ export class LoginComponent {
     this.errorMessage = null;
   }
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKey() {
     this.hideLogIn();
@@ -78,7 +83,7 @@ export class LoginComponent {
     if (this.isSignUpForm) {
       // Password and repassword check
       if (this.authForm.errors?.['passwordMismatch']) {
-        this.errorMessage = "Passwords don't match";
+        this.errorMessage = this.translate.instant('login.err_repassword_match');
         this.isLoading = false;
         return;
       }
@@ -98,12 +103,12 @@ export class LoginComponent {
         },
         error: () => {
           this.isLoading = false;
-          this.errorMessage = 'Registration failed.';
+          this.errorMessage = this.translate.instant('login.err_register_failed');
         }
       });
     } else {
       const credentials: LoginCredentials = {
-        email: this.authForm.value.email,
+        username: this.authForm.value.email,
         password: this.authForm.value.password
       }
 
@@ -114,7 +119,7 @@ export class LoginComponent {
         },
         error: () => {
           this.isLoading = false;
-          this.errorMessage =  'Login failed.';
+          this.errorMessage = this.translate.instant('login.err_login_failed');
         }
       });
     }

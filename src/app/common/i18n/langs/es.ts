@@ -40,6 +40,8 @@ export const locale = {
       'repassword': 'Repita su contraseña',
       'haventaccount': '¿No tiene una cuenta aún?',
       'forgetpassword': '¿Olvidaste tu contraseña?',
+      'show_password': 'Mostrar contraseña',
+      'hide_password': 'Ocultar contraseña',
 
       /* ERRRORS */
       'err_firstname_req': 'El nombre es obligatorio.',
@@ -49,7 +51,9 @@ export const locale = {
       'err_password_req': 'La contraseña es obligatoria.',
       'err_password_minlen': 'La contraseña debe tener al menos 6 caracteres.',
       'err_repassword_match': 'Las contraseñas no coinciden.',
-      'err_repassword_req': 'La confirmación de la contraseña es obligatoria.'
+      'err_repassword_req': 'La confirmación de la contraseña es obligatoria.',
+      'err_login_failed': 'Error al iniciar sesión.',
+      'err_register_failed': 'Error al crear cuenta.'
     },
     others:{
       'hot':'Caliente',

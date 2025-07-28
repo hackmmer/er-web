@@ -5,7 +5,7 @@ import { IUser } from '../../models/user';
 import { Observable, tap } from 'rxjs';
 
 export interface LoginCredentials {
-  email: string,
+  username: string,
   password: string
 }
 
@@ -41,7 +41,7 @@ export class AuthService extends BaseApi {
     }))
   }
 
-  register(credentials: RegisterCredentials) {
+  register(credentials: RegisterCredentials): Observable<IUser> {
     return this.post<IUser>({ endpoint: 'register', body: credentials }).pipe(tap(r => {
     }))
   }

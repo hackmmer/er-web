@@ -40,6 +40,8 @@ export const locale = {
       'repassword': 'Confirm Password',
       'haventaccount': 'Don\'t have an account yet?',
       'forgetpassword': 'Forgot your password?',
+      'show_password': 'Show password',
+      'hide_password': 'Hide password',
 
       /* ERRORS */
       'err_firstname_req': 'First name is required.',
