@@ -55,6 +55,18 @@ export const locale = {
       'err_login_failed': 'Error al iniciar sesión.',
       'err_register_failed': 'Error al crear cuenta.'
     },
+    footer:{
+      'details':'Bocatas que encienden tus sentidos y despiertan tus pasiones. Experiencias culinarias inolvidables con un toque picante.',
+      'label':"2025 Er'Caliente. Todos los derechos reservados. | Bocatas con sabor y humor para adultos",
+      'quick_link':'Enlaces Rápidos',
+      'home':'Inicio',
+      'about':'Sobre Nosotros',
+      'comments':'Comentarios',
+      'legal':'Legal',
+      'terms':'Términos y Condiciones',
+      'privacy':'Política de Privacidad',
+      'follow':'Síguenos',
+    },
     others:{
       'hot':'Caliente',
       'too_hot':'¡Demasiado caliente!',
