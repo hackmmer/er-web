@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
 import { IUser } from '@models/user';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
-interface LoginCredentials {
+export interface LoginCredentials {
   username: string,
   password: string
 }
 
-interface RegisterCredentials {
+export interface RegisterCredentials {
   firstName: string,
   lastName: string,
   email: string,
@@ -34,15 +34,28 @@ export class AuthService extends BaseApi {
   }
 
 
-  login(credentials: LoginCredentials) {
-    this.post<LoginResponse>({ endpoint: 'login', body: credentials }).pipe(tap(r => {
+  login(credentials: LoginCredentials): Observable<LoginResponse> {
+    return this.post<LoginResponse>({ endpoint: 'login', body: credentials }).pipe(tap(r => {
       this.access_token = r.access_token;
+      localStorage.setItem('access_token', r.access_token);
     }))
   }
 
-  register(credentials: RegisterCredentials) {
-    this.post<IUser>({ endpoint: 'register', body: credentials }).pipe(tap(r => {
+  register(credentials: RegisterCredentials): Observable<IUser> {
+    return this.post<IUser>({ endpoint: 'register', body: credentials }).pipe(tap(r => {
     }))
   }
 
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  /* PRIVATES */
+  private getToken(): string | null {
+    if (typeof window !== 'undefined') {
+      try { return localStorage.getItem(this.access_token); } 
+      catch {}
+    }
+    return '';
+  }
 }

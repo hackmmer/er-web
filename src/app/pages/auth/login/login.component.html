@@ -1,0 +1,254 @@
+<!-- Botón principal para abrir el formulario de login -->
+<button 
+    class="btn btn-block hover:bg-primary/20 hover:text-primary-content transition-all duration-300 ease-in-out"
+    (click)="showLoginForm = true">
+    {{ 'buttons.signIn' | translate }}
+</button>
+
+<!-- Modal de Login/Registro -->
+@if (showLoginForm) {
+  <!-- Fondo oscuro con efecto blur -->
+  <div class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center modal-container">
+    
+    <!-- Botón para cerrar el modal (esquina superior derecha) -->
+    <button 
+        class="absolute top-7 right-7 btn btn-sm btn-circle bg-base-300/80 backdrop-blur-sm hover:bg-error/80 hover:rotate-90 hover:scale-110 transition-all duration-300"
+        (click)="showLoginForm = false">
+        ✕  <!-- Icono de cierre -->
+    </button>
+    
+    <!-- Contenedor principal del formulario -->
+    <div class="w-md bg-base-100/70 backdrop-blur-md border-t-4 border-gray-600/50 rounded-md shadow-xl px-8 py-6 hover:shadow-2xl transition-shadow duration-300">
+      
+      <!-- Título dinámico según tipo de formulario -->
+      <h1 class="text-3xl font-semibold text-center mb-6 transition-colors duration-300 hover:text-primary">
+        @if (!isSignUpForm) { 
+          {{ 'login.enter' | translate }} <!-- Login -->
+        } @else { 
+          {{ 'login.register' | translate }} <!-- Registro -->
+        }
+      </h1>
+
+      <!-- Sección de errores generales -->
+      @if (errorMessage) {
+        <div class="alert alert-error mb-4 errors-animate">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+
+      <!-- Formulario de autenticación -->
+      <form class="space-y-4 px-2" [formGroup]="authForm" (submit)="onSubmit()">
+        
+        <!-- Campos específicos para registro -->
+        @if (isSignUpForm) {
+          <!-- Campo: Nombre -->
+          <div>
+            <label class="label">
+              <span class="text-base label-text transition-colors duration-300 hover:text-accent">
+                {{ 'login.firstname' | translate }}
+              </span>
+            </label>
+            <input 
+                type="text" 
+                placeholder="{{ 'login.firstname' | translate }}"
+                formControlName="firstName"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+            <!-- Validación nombre -->
+            @if (authForm.get('firstName')?.invalid && authForm.get('firstName')?.touched) {
+              <div class="text-error text-xs mt-1">
+                {{ 'login.err_firstname_req' | translate }}
+              </div>
+            }
+          </div>
+          
+          <!-- Campo: Apellidos -->
+          <div>
+            <label class="label">
+              <span class="text-base label-text transition-colors duration-300 hover:text-accent">
+                {{ 'login.lastname' | translate }}
+              </span>
+            </label>
+            <input 
+                type="text" 
+                placeholder="{{ 'login.lastname' | translate }}"
+                formControlName="lastName"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+            <!-- Validación apellidos -->
+            @if (authForm.get('lastName')?.invalid && authForm.get('lastName')?.touched) {
+              <div class="text-error text-xs mt-1">
+                {{ 'login.err_lastname_req' | translate }}
+              </div>
+            }
+          </div>
+        }
+        
+        <!-- Campo: Email (común para login y registro) -->
+        <div>
+          <label class="label">
+            <span class="text-base label-text transition-colors duration-300 hover:text-accent">
+              {{ 'login.email' | translate }}
+            </span>
+          </label>
+          <input 
+              type="text" 
+              placeholder="{{ 'login.email' | translate }}"
+              formControlName="email"
+              class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
+          <!-- Validación email -->
+          @if (authForm.get('email')?.invalid && authForm.get('email')?.touched) {
+            <div class="text-error text-xs mt-1">
+              @if (authForm.get('email')?.errors?.['required']) { 
+                {{ 'login.err_email_req' | translate }} 
+              }
+              @if (authForm.get('email')?.errors?.['email']) { 
+                {{ 'login.err_email_invalid' | translate }} 
+              }
+            </div>
+          }
+        </div>
+        
+        <!-- Sección: Contraseña -->
+        <div class="form-control">
+          <label class="label">
+            <span class="text-base label-text transition-colors duration-300 hover:text-accent">
+              {{ 'login.password' | translate }}
+            </span>
+          </label>
+          
+          <!-- Contenedor con input y botón de visualización -->
+          <div class="relative">
+            <input 
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="{{ 'login.password' | translate }}"
+                formControlName="password"
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300 pr-10" />
+            
+            <!-- Botón para mostrar/ocultar contraseña -->
+            <button 
+                type="button" 
+                class="absolute inset-y-0 right-0 px-3 flex items-center cursor-pointer"
+                (click)="showPassword = !showPassword"
+                [attr.aria-label]="(showPassword ? 'login.hide_password' : 'login.show_password') | translate" >
+                
+                <!-- Icono de ojo cerrado (contraseña oculta) -->
+                @if (!showPassword) {
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" 
+                      viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                }
+                
+                <!-- Icono de ojo abierto (contraseña visible) -->
+                @if (showPassword) {
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" 
+                      viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                }
+            </button>
+          </div>
+          
+          <!-- Validaciones de contraseña -->
+          @if (authForm.get('password')?.invalid && authForm.get('password')?.touched) {
+            <div class="text-error text-xs mt-1">
+              @if (authForm.get('password')?.errors?.['required']) { 
+                {{ 'login.err_password_req' | translate }} 
+              }
+              @if (authForm.get('password')?.errors?.['minlength']) { 
+                {{ 'login.err_password_minlen' | translate }} 
+              }
+            </div>
+          }
+        </div>
+        
+        <!-- Campo: Confirmación de contraseña (solo registro) -->
+        @if (isSignUpForm) {
+          <div>
+            <label class="label">
+              <span class="text-base label-text transition-colors duration-300 hover:text-accent">
+                {{ 'login.repassword' | translate }}
+              </span>
+            </label>
+            <input 
+                class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300"
+                type="password" 
+                placeholder="{{ 'login.repassword' | translate }}" 
+                formControlName="repassword" />
+            
+            <!-- Validación: Campo requerido -->
+            @if (authForm.get('repassword')?.touched && authForm.get('repassword')?.errors?.['required']) {
+              <div class="text-error text-xs mt-1">
+                {{ 'login.err_repassword_req' | translate}}
+              </div>
+            }
+            
+            <!-- Validación: Coincidencia de contraseñas -->
+            @if (authForm.errors?.['passwordMismatch'] && authForm.get('repassword')?.touched) {
+              <div class="text-error text-xs mt-1">
+                {{ 'login.err_repassword_match' | translate }}
+              </div>
+            }
+          </div>
+        }
+        
+        <!-- Enlaces inferiores -->
+        @if (!isSignUpForm) {
+          <!-- Enlaces para login: Registro y Recuperación -->
+          <div class="flex justify-between mt-5 mb-2">
+            <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
+               (click)="toggleSignUp()">
+              {{ 'login.haventaccount' | translate }} <!-- ¿No tienes cuenta? -->
+            </p>
+
+            <a href="#" class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300">
+              {{ 'login.forgetpassword' | translate }} <!-- ¿Olvidaste contraseña? -->
+            </a>
+          </div>
+        } @else {
+          <!-- Enlace para registro: Volver a Login -->
+          <div class="flex mt-5 mb-2">
+            <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
+               (click)="toggleSignUp()">
+              {{ 'buttons.signIn' | translate }} <!-- Iniciar sesión -->
+            </p>
+          </div>
+        }
+        
+        <!-- Botón de envío del formulario -->
+        <div class="flex justify-center m-1">
+          <button 
+              type="submit"
+              class="btn bg-base-300/80 backdrop-blur-sm btn-sm py-4 hover:bg-primary/80 hover:text-primary-content hover:scale-105 hover:shadow-lg transition-all duration-300 group"
+              [disabled]="isLoading">
+              
+            <!-- Spinner durante carga -->
+            @if (isLoading) {
+              <span class="loading loading-spinner loading-xs"></span>
+            } @else {
+              <!-- Icono de candado (animado al hover) -->
+              <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  class="h-5 w-5 mr-2 group-hover:rotate-[20deg] transition-transform duration-300" 
+                  viewBox="0 0 20 20" 
+                  fill="currentColor">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+              </svg>
+            }
+            
+            <!-- Texto dinámico del botón -->
+            @if (!isSignUpForm) { 
+              {{ 'buttons.signIn' | translate }} <!-- Iniciar sesión -->
+            } @else { 
+              {{ 'buttons.signUp' | translate }} <!-- Registrarse -->
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
