@@ -28,10 +28,6 @@
     color: var(--yellow-mustard)
 }
 
-.mr-6{
-    margin-right: 6px;
-}
-
 .right-container{
     display: flex;
     justify-content: center;
