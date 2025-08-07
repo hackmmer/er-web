@@ -50,10 +50,17 @@ export class AuthService extends BaseApi {
     return !!this.getToken();
   }
 
+  logOut() {
+    this.access_token = '';
+    localStorage.removeItem('access_token');
+
+    // A futuro cuando este implementado el profile añadir aca un cleanup
+  }
+
   /* PRIVATES */
   private getToken(): string | null {
     if (typeof window !== 'undefined') {
-      try { return localStorage.getItem(this.access_token); } 
+      try { return localStorage.getItem('access_token'); } 
       catch {}
     }
     return '';
