@@ -4,7 +4,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/api/auth.service';
 import { LoginComponent } from "../../pages/auth/login/login.component";
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -29,5 +28,9 @@ export class HeaderComponent {
 
   get theme() : string {
     return this.themeService.getTheme() as string;
+  }
+
+  logOut() {
+    this.auth.logOut();
   }
 }

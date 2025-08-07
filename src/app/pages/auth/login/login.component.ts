@@ -15,7 +15,7 @@ export class LoginComponent {
   isSignUpForm: boolean = false;
   authForm: FormGroup;
   isLoading: boolean = false;
-  errorMessage: string | null = null; // This can be used for debug at try to login or crean an account. Ej: errorMessage = res.message
+  errorMessage: string | null = null; // This can be used for debug at try to login or create an account. Ej: errorMessage = res.message
   authSub: Subscription | null = null;
   showPassword: boolean = false;
 
