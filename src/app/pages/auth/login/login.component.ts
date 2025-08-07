@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, output } from '@angular/core';
 import { AuthService, LoginCredentials, RegisterCredentials } from '../../../services/api/auth.service';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
@@ -18,6 +18,8 @@ export class LoginComponent {
   errorMessage: string | null = null; // This can be used for debug at try to login or create an account. Ej: errorMessage = res.message
   authSub: Subscription | null = null;
   showPassword: boolean = false;
+
+  islogin = output<boolean>();
 
   constructor(private authService: AuthService, private fb: FormBuilder, private translate: TranslateService) {
     this.authForm = this.fb.group({
@@ -99,6 +101,7 @@ export class LoginComponent {
         next: () => {
           this.isLoading = false;
           this.isSignUpForm = false;
+          this.islogin.emit(true)
           this.updateSignUpValidators();
         },
         error: () => {
@@ -115,6 +118,7 @@ export class LoginComponent {
       this.authSub = this.authService.login(credentials).subscribe({
         next: () => {
           this.isLoading = false;
+          this.islogin.emit(true)
           this.hideLogIn();
         },
         error: () => {

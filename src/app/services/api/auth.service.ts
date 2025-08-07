@@ -37,6 +37,7 @@ export class AuthService extends BaseApi {
   login(credentials: LoginCredentials): Observable<LoginResponse> {
     return this.post<LoginResponse>({ endpoint: 'login', body: credentials }).pipe(tap(r => {
       this.access_token = r.access_token;
+      console.log(this.access_token)
       localStorage.setItem('access_token', r.access_token);
     }))
   }
@@ -58,7 +59,7 @@ export class AuthService extends BaseApi {
   }
 
   /* PRIVATES */
-  private getToken(): string | null {
+  public getToken(): string | null {
     if (typeof window !== 'undefined') {
       try { return localStorage.getItem('access_token'); } 
       catch {}

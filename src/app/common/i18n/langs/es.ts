@@ -29,6 +29,7 @@ export const locale = {
       'logout':'Salir',
       'signIn':'Iniciar sesión',
       'signUp':'Crear cuenta',
+      'admin':'Administrador',
     },
     login: {
       'enter': 'Entrar',

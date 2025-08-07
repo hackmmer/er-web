@@ -12,13 +12,16 @@ export class UsersService extends BaseApi {
   public currentUser?: IUser;
   headers?: HttpHeaders;
 
+  token?:string | null;
+
   constructor(http: HttpClient, private authService: AuthService) {
     super(http, 'users');
   }
 
   updateHeaders() {
+    this.token = this.authService.getToken()
     this.headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authService.access_token}`,
+      Authorization: `Bearer ${this.token}`,
     });
   }
 
