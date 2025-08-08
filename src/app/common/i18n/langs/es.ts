@@ -68,6 +68,14 @@ export const locale = {
       'privacy':'Política de Privacidad',
       'follow':'Síguenos',
     },
+    admin:{
+      'panel':'Panel de Administración',
+      'products':'Productos',
+      'stadistics':'Estadísticas',
+      'orders':'Pedidos',
+      'settings':'Ajustes',
+      'testimonials':'Testimonios'
+    },
     others:{
       'hot':'Caliente',
       'too_hot':'¡Demasiado caliente!',

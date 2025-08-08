@@ -1,0 +1,51 @@
+<div class="admin-sidebar w-64 min-h-screen flex flex-col">
+    <div class="p-6 border-b border-gray-700">
+        <div class="flex items-center">
+            <div class="text-center">
+                <h1 class="text-secondary text-xl font-bold">{{'admin.panel' | translate}}</h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex-1 py-4">
+        <ul class="space-y-1">
+            <li class="nav-item active">
+                <a routerLink="product" class="flex items-center p-4">
+                    <i class="fas fa-fire text-secondary mr-3"></i>
+                    <span>{{'admin.products' | translate}}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="stadistic" class="flex items-center p-4">
+                    <i class="fas fa-chart-bar text-gray-400 mr-3"></i>
+                    <span>{{'admin.stadistics' | translate}}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="orders" class="flex items-center p-4">
+                    <i class="fas fa-shopping-cart text-gray-400 mr-3"></i>
+                    <span>{{'admin.orders' | translate}}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="testimonials" class="flex items-center p-4">
+                    <i class="fas fa-comments text-gray-400 mr-3"></i>
+                    <span>{{'admin.testimonials' | translate}}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="settings" class="flex items-center p-4">
+                    <i class="fas fa-cog text-gray-400 mr-3"></i>
+                    <span>{{'admin.settings' | translate}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="fixed bottom-6 right-6 z-50">
+    <button class="btn btn-primary btn-circle shadow-lg">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+</div>
+
