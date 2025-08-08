@@ -54,8 +54,6 @@ export class AuthService extends BaseApi {
   logOut() {
     this.access_token = '';
     localStorage.removeItem('access_token');
-
-    // A futuro cuando este implementado el profile añadir aca un cleanup
   }
 
   /* PRIVATES */

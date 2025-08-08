@@ -53,8 +53,13 @@ export const locale = {
       'err_password_minlen': 'La contraseña debe tener al menos 6 caracteres.',
       'err_repassword_match': 'Las contraseñas no coinciden.',
       'err_repassword_req': 'La confirmación de la contraseña es obligatoria.',
-      'err_login_failed': 'Error al iniciar sesión.',
-      'err_register_failed': 'Error al crear cuenta.'
+      'err_login_failed': 'Error al iniciar sesión. Por favor, inténtalo de nuevo.',
+      'err_register_failed': 'Error al crear cuenta.',
+      'req_password_minlen': 'Al menos 6 caracteres',
+      'req_password_upper': 'Una letra mayúscula',
+      'req_password_lower': 'Una letra minúscula',
+      'req_password_number': 'Un número',
+      'req_password_symbol': 'Un símbolo (!@#$...)'
     },
     footer:{
       'details':'Bocatas que encienden tus sentidos y despiertan tus pasiones. Experiencias culinarias inolvidables con un toque picante.',
