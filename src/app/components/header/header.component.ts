@@ -5,7 +5,6 @@ import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/api/auth.service';
 import { LoginComponent } from "../../pages/auth/login/login.component";
 import { UsersService } from '@services/api/users.service';
-import { IUser } from '@models/user';
 
 import { EnumRoleUser } from '@models/user';
 

@@ -4,6 +4,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AdminComponent } from './modules/admin/admin.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,10 @@ export const routes: Routes = [
     {
         path:'menu',
         component:MenuComponent
+    },
+    {
+        path:'profile',
+        component:ProfileComponent
     },
     // {
     //     path:'cart',
@@ -25,5 +30,5 @@ export const routes: Routes = [
     {
         path:'**',
         component:NotFoundComponent
-    }
+    },
 ];
