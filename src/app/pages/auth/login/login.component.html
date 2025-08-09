@@ -1,4 +1,4 @@
-<!-- Botón principal para abrir el formulario de login -->
+<!-- Main button to open the login form -->
 <button 
     class="btn btn-circle btn-ghost hover:bg-primary/20 hover:text-primary-content transition-all duration-300 ease-in-out"
     (click)="showLoginForm = true">
@@ -8,31 +8,31 @@
 
 </button>
 
-<!-- Modal de Login/Registro -->
+<!-- Login/Register Modal -->
 @if (showLoginForm) {
-  <!-- Fondo oscuro con efecto blur -->
+  <!-- Dark background with blur effect -->
   <div class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center modal-container">
     
-    <!-- Botón para cerrar el modal (esquina superior derecha) -->
+    <!-- Close modal button (top right corner) -->
     <button 
         class="absolute top-7 right-7 btn btn-sm btn-circle bg-base-300/80 backdrop-blur-sm hover:bg-error/80 hover:rotate-90 hover:scale-110 transition-all duration-300"
         (click)="showLoginForm = false">
-        ✕  <!-- Icono de cierre -->
+        ✕  <!-- Close icon -->
     </button>
     
-    <!-- Contenedor principal del formulario -->
+    <!-- Main form container -->
     <div class="w-md bg-base-100/70 backdrop-blur-md border-t-4 border-gray-600/50 rounded-md shadow-xl px-8 py-6 hover:shadow-2xl transition-shadow duration-300">
       
-      <!-- Título dinámico según tipo de formulario -->
+      <!-- Dynamic title based on form type -->
       <h1 class="text-3xl font-semibold text-center mb-6 transition-colors duration-300 hover:text-primary">
         @if (!isSignUpForm) { 
           {{ 'login.enter' | translate }} <!-- Login -->
         } @else { 
-          {{ 'login.register' | translate }} <!-- Registro -->
+          {{ 'login.register' | translate }} <!-- Register -->
         }
       </h1>
 
-      <!-- Sección de errores generales -->
+      <!-- General error section -->
       @if (errorMessage) {
         <div class="alert alert-error mb-4 errors-animate">
           <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -42,12 +42,12 @@
         </div>
       }
 
-      <!-- Formulario de autenticación -->
+      <!-- Authentication form -->
       <form class="space-y-4 px-2" [formGroup]="authForm" (submit)="onSubmit()">
         
-        <!-- Campos específicos para registro -->
+        <!-- Specific fields for registration -->
         @if (isSignUpForm) {
-          <!-- Campo: Nombre -->
+          <!-- Field: First Name -->
           <div>
             <label class="label">
               <span class="text-base label-text transition-colors duration-300 hover:text-accent">
@@ -59,7 +59,7 @@
                 placeholder="{{ 'login.firstname' | translate }}"
                 formControlName="firstName"
                 class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
-            <!-- Validación nombre -->
+            <!-- First name validation -->
             @if (authForm.get('firstName')?.invalid && authForm.get('firstName')?.touched) {
               <div class="text-error text-xs mt-1">
                 {{ 'login.err_firstname_req' | translate }}
@@ -67,7 +67,7 @@
             }
           </div>
           
-          <!-- Campo: Apellidos -->
+          <!-- Field: Last Name -->
           <div>
             <label class="label">
               <span class="text-base label-text transition-colors duration-300 hover:text-accent">
@@ -79,7 +79,7 @@
                 placeholder="{{ 'login.lastname' | translate }}"
                 formControlName="lastName"
                 class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
-            <!-- Validación apellidos -->
+            <!-- Last name validation -->
             @if (authForm.get('lastName')?.invalid && authForm.get('lastName')?.touched) {
               <div class="text-error text-xs mt-1">
                 {{ 'login.err_lastname_req' | translate }}
@@ -88,7 +88,7 @@
           </div>
         }
         
-        <!-- Campo: Email (común para login y registro) -->
+        <!-- Field: Email (common for login and register) -->
         <div>
           <label class="label">
             <span class="text-base label-text transition-colors duration-300 hover:text-accent">
@@ -100,7 +100,7 @@
               placeholder="{{ 'login.email' | translate }}"
               formControlName="email"
               class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300" />
-          <!-- Validación email -->
+          <!-- Email validation -->
           @if (authForm.get('email')?.invalid && authForm.get('email')?.touched) {
             <div class="text-error text-xs mt-1">
               @if (authForm.get('email')?.errors?.['required']) { 
@@ -113,7 +113,7 @@
           }
         </div>
         
-        <!-- Sección: Contraseña -->
+        <!-- Section: Password -->
         <div class="form-control">
           <label class="label">
             <span class="text-base label-text transition-colors duration-300 hover:text-accent">
@@ -121,7 +121,7 @@
             </span>
           </label>
           
-          <!-- Contenedor con input y botón de visualización -->
+          <!-- Container with input and visibility button -->
           <div class="relative">
             <input 
                 [type]="showPassword ? 'text' : 'password'"
@@ -129,14 +129,14 @@
                 formControlName="password"
                 class="w-full input input-bordered bg-base-200/70 hover:bg-base-200 focus:border-primary/50 transition-all duration-300 pr-10" />
             
-            <!-- Botón para mostrar/ocultar contraseña -->
+            <!-- Button to show/hide password -->
             <button 
                 type="button" 
                 class="absolute inset-y-0 right-0 px-3 flex items-center cursor-pointer"
                 (click)="showPassword = !showPassword"
                 [attr.aria-label]="(showPassword ? 'login.hide_password' : 'login.show_password') | translate" >
                 
-                <!-- Icono de ojo cerrado (contraseña oculta) -->
+                <!-- Eye closed icon (password hidden) -->
                 @if (!showPassword) {
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" 
                       viewBox="0 0 24 24" stroke="currentColor">
@@ -145,7 +145,7 @@
                   </svg>
                 }
                 
-                <!-- Icono de ojo abierto (contraseña visible) -->
+                <!-- Eye open icon (password visible) -->
                 @if (showPassword) {
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" 
                       viewBox="0 0 24 24" stroke="currentColor">
@@ -156,7 +156,26 @@
             </button>
           </div>
           
-          <!-- Validaciones de contraseña -->
+          <!-- Password requirements -->
+          @let passwordTouched = authForm.get('password')?.touched;
+          @let passwordValue = authForm.get('password')?.value;
+          @if (isSignUpForm && (passwordTouched || passwordValue)) {
+            <ul class="mt-2 space-y-1 text-sm transition-all duration-300">
+              @for (rule of passwordRules; track $index) {
+                <li class="flex items-center gap-2 transition-colors duration-300"
+                    [class.text-success]="passwordCriteria[rule.key]"
+                    [class.text-error]="!passwordCriteria[rule.key]">
+                  <span class="inline-block w-2 h-2 rounded-full"
+                    [class.bg-success]="passwordCriteria[rule.key]"
+                    [class.bg-error]="!passwordCriteria[rule.key]">
+                  </span>
+                  {{ rule.label | translate }}
+                </li>
+              }
+            </ul>
+          }
+
+          <!-- Password validations -->
           @if (authForm.get('password')?.invalid && authForm.get('password')?.touched) {
             <div class="text-error text-xs mt-1">
               @if (authForm.get('password')?.errors?.['required']) { 
@@ -169,7 +188,7 @@
           }
         </div>
         
-        <!-- Campo: Confirmación de contraseña (solo registro) -->
+        <!-- Field: Password Confirmation (register only) -->
         @if (isSignUpForm) {
           <div>
             <label class="label">
@@ -183,14 +202,14 @@
                 placeholder="{{ 'login.repassword' | translate }}" 
                 formControlName="repassword" />
             
-            <!-- Validación: Campo requerido -->
+            <!-- Validation: Required field -->
             @if (authForm.get('repassword')?.touched && authForm.get('repassword')?.errors?.['required']) {
               <div class="text-error text-xs mt-1">
                 {{ 'login.err_repassword_req' | translate}}
               </div>
             }
             
-            <!-- Validación: Coincidencia de contraseñas -->
+            <!-- Validation: Password match -->
             @if (authForm.errors?.['passwordMismatch'] && authForm.get('repassword')?.touched) {
               <div class="text-error text-xs mt-1">
                 {{ 'login.err_repassword_match' | translate }}
@@ -199,41 +218,41 @@
           </div>
         }
         
-        <!-- Enlaces inferiores -->
+        <!-- Bottom links -->
         @if (!isSignUpForm) {
-          <!-- Enlaces para login: Registro y Recuperación -->
+          <!-- Links for login: Register and Recovery -->
           <div class="flex justify-between mt-5 mb-2">
             <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
                (click)="toggleSignUp()">
-              {{ 'login.haventaccount' | translate }} <!-- ¿No tienes cuenta? -->
+              {{ 'login.haventaccount' | translate }} <!-- Don't have an account? -->
             </p>
 
             <a href="#" class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300">
-              {{ 'login.forgetpassword' | translate }} <!-- ¿Olvidaste contraseña? -->
+              {{ 'login.forgetpassword' | translate }} <!-- Forgot password? -->
             </a>
           </div>
         } @else {
-          <!-- Enlace para registro: Volver a Login -->
+          <!-- Link for register: Back to Login -->
           <div class="flex mt-5 mb-2">
             <p class="text-xs text-gray-600 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 cursor-pointer" 
                (click)="toggleSignUp()">
-              {{ 'buttons.signIn' | translate }} <!-- Iniciar sesión -->
+              {{ 'buttons.signIn' | translate }} <!-- Sign in -->
             </p>
           </div>
         }
         
-        <!-- Botón de envío del formulario -->
+        <!-- Form submission button -->
         <div class="flex justify-center m-1">
           <button 
               type="submit"
               class="btn bg-base-300/80 backdrop-blur-sm btn-sm py-4 hover:bg-primary/80 hover:text-primary-content hover:scale-105 hover:shadow-lg transition-all duration-300 group"
               [disabled]="isLoading">
               
-            <!-- Spinner durante carga -->
+            <!-- Spinner during loading -->
             @if (isLoading) {
               <span class="loading loading-spinner loading-xs"></span>
             } @else {
-              <!-- Icono de candado (animado al hover) -->
+              <!-- Lock icon (animated on hover) -->
               <svg 
                   xmlns="http://www.w3.org/2000/svg" 
                   class="h-5 w-5 mr-2 group-hover:rotate-[20deg] transition-transform duration-300" 
@@ -243,11 +262,11 @@
               </svg>
             }
             
-            <!-- Texto dinámico del botón -->
+            <!-- Dynamic button text -->
             @if (!isSignUpForm) { 
-              {{ 'buttons.signIn' | translate }} <!-- Iniciar sesión -->
+              {{ 'buttons.signIn' | translate }} <!-- Sign in -->
             } @else { 
-              {{ 'buttons.signUp' | translate }} <!-- Registrarse -->
+              {{ 'buttons.signUp' | translate }} <!-- Sign up -->
             }
           </button>
         </div>

@@ -51,7 +51,13 @@ export const locale = {
       'err_password_req': 'Password is required.',
       'err_password_minlen': 'Password must be at least 6 characters.',
       'err_repassword_match': 'Passwords do not match.',
-      'err_repassword_req': 'Password confirmation is required.'
+      'err_repassword_req': 'Password confirmation is required.',
+      'err_login_failed': 'Login failed. Please try again.',
+      'req_password_minlen': 'At least 6 characters',
+      'req_password_upper': 'One uppercase letter',
+      'req_password_lower': 'One lowercase letter',
+      'req_password_number': 'One number',
+      'req_password_symbol': 'One symbol (!@#$...)'
     },
     others: {
       'hot': 'Hot',
