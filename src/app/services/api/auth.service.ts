@@ -3,17 +3,18 @@ import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
 import { IUser } from '@models/user';
 import { Observable, tap } from 'rxjs';
+import { LocalStorageService } from '@services/local-storage.service';
 
 export interface LoginCredentials {
-  username: string,
-  password: string
+  username: string;
+  password: string;
 }
 
 export interface RegisterCredentials {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
 
 interface LoginResponse {
@@ -23,28 +24,31 @@ interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService extends BaseApi {
+  // CONSTS
+  private readonly access_token_key = 'access_token';
 
-  public access_token = "";
-
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, private localStorage: LocalStorageService) {
     super(http, 'auth');
   }
 
-
   login(credentials: LoginCredentials): Observable<LoginResponse> {
-    return this.post<LoginResponse>({ endpoint: 'login', body: credentials }).pipe(tap(r => {
-      this.access_token = r.access_token;
-      console.log(this.access_token)
-      localStorage.setItem('access_token', r.access_token);
-    }))
+    return this.post<LoginResponse>({
+      endpoint: 'login',
+      body: credentials,
+    }).pipe(
+      tap((r) => {
+        this.localStorage.set(this.access_token_key, r.access_token);
+      })
+    );
   }
 
   register(credentials: RegisterCredentials): Observable<IUser> {
-    return this.post<IUser>({ endpoint: 'register', body: credentials }).pipe(tap(r => {
-    }))
+    return this.post<IUser>({ endpoint: 'register', body: credentials }).pipe(
+      tap((r) => {})
+    );
   }
 
   isLoggedIn(): boolean {
@@ -52,16 +56,10 @@ export class AuthService extends BaseApi {
   }
 
   logOut() {
-    this.access_token = '';
-    localStorage.removeItem('access_token');
+    localStorage.removeItem(this.access_token_key)
   }
 
-  /* PRIVATES */
-  public getToken(): string | null {
-    if (typeof window !== 'undefined') {
-      try { return localStorage.getItem('access_token'); } 
-      catch {}
-    }
-    return '';
+  public getToken() {
+    return this.localStorage.get(this.access_token_key);
   }
 }

@@ -3,6 +3,7 @@ import { AuthService, LoginCredentials, RegisterCredentials } from '../../../ser
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ApiService } from '@services/api/api.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit {
     { key: 'symbol', label: 'login.req_password_symbol' }
   ];
 
-  constructor(private authService: AuthService, private fb: FormBuilder, private translate: TranslateService) {
+  constructor(private api: ApiService, private fb: FormBuilder, private translate: TranslateService) {
     this.authForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -124,7 +125,7 @@ export class LoginComponent implements OnInit {
         password: this.authForm.value.password
       };
 
-      this.authSub = this.authService.register(credentials).subscribe({
+      this.authSub = this.api.auth.register(credentials).subscribe({
         next: () => {
           this.isLoading = false;
           this.isSignUpForm = false;
@@ -142,7 +143,7 @@ export class LoginComponent implements OnInit {
         password: this.authForm.value.password
       }
 
-      this.authSub = this.authService.login(credentials).subscribe({
+      this.authSub = this.api.auth.login(credentials).subscribe({
         next: () => {
           this.isLoading = false;
           this.islogin.emit(true)

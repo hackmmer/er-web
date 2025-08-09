@@ -1,63 +1,64 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../../common/themes/theme.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { RouterLink, Router } from '@angular/router';
-import { AuthService } from '../../services/api/auth.service';
-import { LoginComponent } from "../../pages/auth/login/login.component";
-import { UsersService } from '@services/api/users.service';
-
-import { EnumRoleUser } from '@models/user';
+import { RouterLink } from '@angular/router';
+import { LoginComponent } from '../../pages/auth/login/login.component';
+import { AppwriteService } from '@services/appwrite.service';
+import { NgOptimizedImage } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
+import { EnumRoleUser, IUser } from '@models/user';
+import { ApiService } from '@services/api/api.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, TranslatePipe, LoginComponent],
+  imports: [RouterLink, TranslatePipe, LoginComponent, NgOptimizedImage],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  isMenuOpen:boolean;
+  isMenuOpen: boolean;
   itemsCounter: number;
   itemsSubtotal: number;
 
-  userRole!:EnumRoleUser;
-  isLoguin:boolean;
+  user$ = new BehaviorSubject<IUser | null>(null);
+  user!:IUser | null;
 
-  constructor(public themeService: ThemeService, private router: Router, public auth: AuthService, private userService:UsersService) {
+  constructor(
+    public themeService: ThemeService,
+    protected api: ApiService,
+    protected appwrite: AppwriteService) {
     this.isMenuOpen = false;
     this.itemsCounter = 0;
     this.itemsSubtotal = 0;
-
-    this.isLoguin = this.auth.isLoggedIn();
   }
 
   ngOnInit(): void {
-    this.loggedIn();
+    this.loggedIn()
   }
 
   private loggedIn(){
-    if(this.isLoguin){
-      this.userService.getCurrentUser().subscribe(u=>{
-        this.userRole = u.role
+    if(this.api.auth.isLoggedIn()){
+      this.api.users.getCurrentUser().subscribe(u=>{
+        this.user$.next(u);
+        this.user = this.user$.getValue()
       })
     }
   }
 
   recibe_login(v:boolean){
-    this.isLoguin = v;
     this.loggedIn()
+  }
+
+  logOut() {
+    this.api.auth.logOut();
+    this.user=null
   }
 
   toggleTheme() {
     this.themeService.toggleTheme();
   }
 
-  get theme() : string {
+  get theme(): string {
     return this.themeService.getTheme() as string;
-  }
-
-  logOut() {
-    this.auth.logOut();
-    this.isLoguin = false;
-    this.router.navigate(['/']);
   }
 }

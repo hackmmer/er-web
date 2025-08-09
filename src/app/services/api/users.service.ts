@@ -21,7 +21,7 @@ export class UsersService extends BaseApi {
   updateHeaders() {
     this.token = this.authService.getToken()
     this.headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${this.authService.getToken()}`,
     });
   }
 
