@@ -5,6 +5,7 @@ import { IProduct } from '@models/product';
 
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ApiModule } from '@services/api/api.module';
+import { AppwriteService } from '@services/appwrite.service';
 
 @Component({
   selector: 'app-menu',
@@ -157,13 +158,14 @@ export class MenuComponent implements OnInit {
     },
   ];
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private appwrite: AppwriteService) {}
 
   ngOnInit(): void {
     this.api.products.findAll().subscribe((p: IProduct[]) => {
-      console.log(p);
+      // console.log(p);
+      // remove this for loop after files are uploaded correctly
       for (let i = 0; i < p.length; i++)
-        p[i].imageUrl = this.products[i % this.products.length].imageUrl;
+        p[i].imageUrl = this.appwrite.getFileViewUrl('68966b1f000ba84e9f9e');
       this.products = p;
     });
   }

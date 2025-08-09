@@ -23,6 +23,7 @@
     "@angular/ssr": "^19.2.15",
     "@ngx-translate/core": "^16.0.4",
     "@tailwindcss/postcss": "^4.1.11",
+    "appwrite": "^18.1.1",
     "daisyui": "^5.0.46",
     "express": "^4.21.2",
     "postcss": "^8.5.6",
