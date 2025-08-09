@@ -71,10 +71,11 @@ export const locale = {
     admin:{
       'panel':'Panel de Administración',
       'products':'Productos',
-      'stadistics':'Estadísticas',
+      'promos':'Promociones',
       'orders':'Pedidos',
+      'users':'Usuarios',
       'settings':'Ajustes',
-      'testimonials':'Testimonios'
+      'testimonials':'Testimonios',
     },
     others:{
       'hot':'Caliente',

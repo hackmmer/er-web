@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../../common/themes/theme.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { LoginComponent } from '../../pages/auth/login/login.component';
 import { AppwriteService } from '@services/appwrite.service';
 import { NgOptimizedImage } from '@angular/common';
@@ -26,7 +26,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     public themeService: ThemeService,
     protected api: ApiService,
-    protected appwrite: AppwriteService) {
+    protected appwrite: AppwriteService,
+    private router:Router) {
     this.isMenuOpen = false;
     this.itemsCounter = 0;
     this.itemsSubtotal = 0;
@@ -52,6 +53,7 @@ export class HeaderComponent implements OnInit {
   logOut() {
     this.api.auth.logOut();
     this.user=null
+    this.router.navigate([''])
   }
 
   toggleTheme() {
