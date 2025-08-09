@@ -162,10 +162,10 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.products.findAll().subscribe((p: IProduct[]) => {
-      console.log(p);
+      // console.log(p);
       // remove this for loop after files are uploaded correctly
       for (let i = 0; i < p.length; i++)
-        p[i].imageUrl = this.appwrite.getFileUrl('68966b1f000ba84e9f9e');
+        p[i].imageUrl = this.appwrite.getFileViewUrl('68966b1f000ba84e9f9e');
       this.products = p;
     });
   }

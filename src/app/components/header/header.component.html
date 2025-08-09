@@ -27,7 +27,7 @@
                 <li><a>Link 3</a></li>
                 <li><a>Link 4</a></li> -->
             </ul>
-            
+
             <!-- Market cart -->
             <div class="dropdown dropdown-end mr-6">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
@@ -55,16 +55,19 @@
                 <svg aria-label="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></g></svg>
             </label>
             <!-- Profile -->
-            @if (!auth.isLoggedIn()) {
+            @let user = user$.getValue();
+            @if (!user) {
                 <app-login></app-login>
             }
             @else {
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar border border-base-content">
-                        <div class="w-10 rounded-full">
+                        <div class="w-10 rounded-full relative">
                         <img
                             alt="Tailwind CSS Navbar component"
-                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                            priority
+                            fill
+                            [ngSrc]="appwrite.getInitials( user.firstName )" />
                         </div>
                     </div>
                     <ul
