@@ -14,10 +14,6 @@ export const routes: Routes = [
         path:'menu',
         component:MenuComponent
     },
-    // {
-    //     path:'cart',
-    //     component:CartComponent
-    // },
     {
         path:'admin',
         component:AdminComponent,
