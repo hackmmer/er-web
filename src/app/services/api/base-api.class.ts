@@ -42,4 +42,14 @@ export abstract class BaseApi{
       }
     );
   }
+
+  patch<T = any>(options?: ApiOptions) {
+    return this.http.patch<T>(`${this.fullUrl}/${options?.endpoint ?? ''}`,
+      options?.body ?? '',
+      {
+        headers: options?.headers,
+        params: options?.params
+      }
+    );
+  }
 }

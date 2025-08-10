@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
 import { IUser } from '@models/user';
 import { AuthService } from './auth.service';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -35,4 +35,14 @@ export class UsersService extends BaseApi {
       })
     );
   }
+
+
+  /* PROFILE UPDATES */
+  updateUserPhone(phone: string): Observable<IUser> {
+    return this.patch<IUser>({
+      headers: this.headers,
+      body: { phone: phone }
+    });
+  }
+
 }
