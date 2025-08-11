@@ -2,7 +2,7 @@ export const environment = {
     production: false,
     api: {
         host: "https://ercaliente.onrender.com",
-        url: "https://er-backend-xlfc.onrender.com",
+        url: "https://er-backend-xlfc.onrender.com/api",
     },
     appwrite: {
       project_id: '687d4583003befe9a362',
