@@ -17,7 +17,7 @@ export interface CRUD<T> {
   remove?(id: string): Observable<T | any>;
 }
 
-export abstract class BaseApi{
+export abstract class BaseApi {
   readonly baseUrl = environment.api.url;
   readonly fullUrl: string;
 
@@ -27,7 +27,6 @@ export abstract class BaseApi{
 
   get<T = any>(options?: ApiOptions) {
     return this.http.get<T>(`${this.fullUrl}/${options?.endpoint ?? ''}`, {
-      headers: options?.headers,
       params: options?.params,
     });
   }
@@ -37,7 +36,6 @@ export abstract class BaseApi{
       `${this.fullUrl}/${options?.endpoint ?? ''}`,
       options?.body ?? '',
       {
-        headers: options?.headers,
         params: options?.params,
       }
     );

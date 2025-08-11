@@ -1,58 +1,126 @@
-<div class="admin-sidebar w-64 min-h-screen flex flex-col">
-    <div class="p-6 border-b border-gray-700">
-        <div class="flex items-center">
-            <div class="text-center">
-                <h1 class="text-secondary text-xl font-bold">{{'admin.panel' | translate}}</h1>
-            </div>
+<div class="flex min-h-screen">
+  <!-- Botón de flecha para abrir sidebar -->
+  <button type="button" *ngIf="!sidebarOpen" class="md:hidden fixed top-1/2 left-1 z-50 btn btn-primary btn-circle shadow-lg transform -translate-y-1/2" (click)="toggleSidebar()">
+    <i class="fas fa-arrow-right"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <div class="admin-sidebar w-64 min-h-screen flex flex-col fixed md:static transform transition-transform duration-300 mt-2 z-50" [class.-translate-x-full]="!sidebarOpen"
+       [class.translate-x-0]="sidebarOpen"
+       [class.md:translate-x-0]="true">
+    <div class="p-6 border-b border-gray-700 relative">
+      <div class="flex items-center justify-between">
+        <div class="text-center w-full">
+          <h1 class="text-secondary text-xl font-bold">{{'admin.panel' | translate}}</h1>
         </div>
+        <!-- Botón para cerrar en móviles -->
+        <button type="button" class="md:hidden absolute top-4 right-4 btn btn-ghost btn-circle" (click)="toggleSidebar()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
     
     <div class="flex-1 py-4">
-        <ul class="space-y-1">
-            <li class="nav-item active">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-shopping-cart text-secondary mr-3"></i>
-                    <span>{{'admin.products' | translate}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-fire  mr-3"></i>
-                    <span>{{'admin.promos' | translate}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-shopping-cart  mr-3"></i>
-                    <span>{{'admin.orders' | translate}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-comments  mr-3"></i>
-                    <span>{{'admin.testimonials' | translate}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-users  mr-3"></i>
-                    <span>{{'admin.users' | translate}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="flex items-center p-4">
-                    <i class="fas fa-cog  mr-3"></i>
-                    <span>{{'admin.settings' | translate}}</span>
-                </a>
-            </li>
-        </ul>
+      <ul class="space-y-1">
+        <li [class.active]="activeItem === 'products'" (click)="setActiveItem('products')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-shopping-cart text-secondary mr-3"></i>
+            <span>{{'admin.products' | translate}}</span>
+          </a>
+        </li>
+        <li [class.active]="activeItem === 'promos'" (click)="setActiveItem('promos')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-fire mr-3"></i>
+            <span>{{'admin.promos' | translate}}</span>
+          </a>
+        </li>
+        <li [class.active]="activeItem === 'orders'" (click)="setActiveItem('orders')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-shopping-cart mr-3"></i>
+            <span>{{'admin.orders' | translate}}</span>
+          </a>
+        </li>
+        <li [class.active]="activeItem === 'testimonials'" (click)="setActiveItem('testimonials')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-comments mr-3"></i>
+            <span>{{'admin.testimonials' | translate}}</span>
+          </a>
+        </li>
+        <li [class.active]="activeItem === 'users'" (click)="setActiveItem('users')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-users mr-3"></i>
+            <span>{{'admin.users' | translate}}</span>
+          </a>
+        </li>
+        <li [class.active]="activeItem === 'settings'" (click)="setActiveItem('settings')" class="nav-item cursor-pointer">
+          <a class="flex items-center p-4">
+            <i class="fas fa-cog mr-3"></i>
+            <span>{{'admin.settings' | translate}}</span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
+
+  <!-- Overlay para móviles -->
+  <div *ngIf="sidebarOpen" (click)="toggleSidebar()" 
+       class="md:hidden fixed inset-0 bg-base-200 z-40"></div>
+
+  <!-- Contenedor principal de contenido -->
+  <div class="flex-1 p-4 md:ml-64 mt-0 min-h-screen">
+    <!-- Mostramos el template activo directamente -->
+    <ng-container *ngIf="activeTemplate">
+      <ng-container *ngTemplateOutlet="activeTemplate"></ng-container>
+    </ng-container>
+  </div>
 </div>
 
-
+<!-- Botón flotante -->
 <div class="fixed bottom-6 right-6 z-50">
-    <button class="btn btn-primary btn-circle shadow-lg">
-        <i class="fas fa-plus text-xl"></i>
-    </button>
+  <button (click)="add_edit_product()" type="button" class="btn btn-primary btn-circle shadow-lg">
+    <i class="fas fa-plus text-xl"></i>
+  </button>
 </div>
 
+<!-- Templates para cada sección -->
+<ng-template #productsTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.products' | translate}}</h2>
+    <!-- Contenido de productos aquí -->
+  </div>
+</ng-template>
+
+<ng-template #promosTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.promos' | translate}}</h2>
+    <!-- Contenido de promociones aquí -->
+  </div>
+</ng-template>
+
+<ng-template #ordersTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.orders' | translate}}</h2>
+    <!-- Contenido de pedidos aquí -->
+  </div>
+</ng-template>
+
+<ng-template #testimonialsTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.testimonials' | translate}}</h2>
+    <!-- Contenido de testimonios aquí -->
+  </div>
+</ng-template>
+
+<ng-template #usersTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.users' | translate}}</h2>
+    <!-- Contenido de usuarios aquí -->
+  </div>
+</ng-template>
+
+<ng-template #settingsTemplate>
+  <div class="p-4">
+    <h2 class="text-2xl font-bold mb-4">{{'admin.settings' | translate}}</h2>
+    <!-- Contenido de configuración aquí -->
+  </div>
+</ng-template>

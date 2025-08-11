@@ -28,7 +28,7 @@ interface LoginResponse {
 })
 export class AuthService extends BaseApi {
   // CONSTS
-  private readonly access_token_key = 'access_token';
+  public readonly access_token_key = 'access_token';
 
   constructor(http: HttpClient, private localStorage: LocalStorageService) {
     super(http, 'auth');

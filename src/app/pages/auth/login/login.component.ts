@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).+$/)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)]],
       repassword: ['']
     }, {
       validators: this.passwordMatchValidator
@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit {
       this.passwordCriteria['uppercase'] = /[A-Z]/.test(value);
       this.passwordCriteria['lowercase'] = /[a-z]/.test(value);
       this.passwordCriteria['number'] = /\d/.test(value);
-      this.passwordCriteria['symbol'] = /[^\w\s]/.test(value);
     });
   }
 
