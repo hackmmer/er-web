@@ -12,24 +12,12 @@ export class UsersService extends BaseApi {
   public currentUser?: IUser;
   headers?: HttpHeaders;
 
-  token?:string | null;
-
   constructor(http: HttpClient, private authService: AuthService) {
     super(http, 'users');
   }
 
-  updateHeaders() {
-    this.token = this.authService.getToken()
-    this.headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authService.getToken()}`,
-    });
-  }
-
   getCurrentUser() {
-    this.updateHeaders();
-    return this.get<IUser>({
-      headers: this.headers,
-    }).pipe(
+    return this.get<IUser>().pipe(
       tap((user) => {
         this.currentUser = user;
       })
