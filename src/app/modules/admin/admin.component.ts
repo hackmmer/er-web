@@ -74,11 +74,9 @@ export class AdminComponent {
     })
     this.api.ingredients.findAll().subscribe(e=>{
       this.ingredients=e
-      console.log(this.ingredients)
     })
     this.api.products.findAll().subscribe(e=>{
       this.products=e
-      console.log(this.products)
     })
   }
 
