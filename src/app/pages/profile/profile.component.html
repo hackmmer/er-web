@@ -1,25 +1,61 @@
 @if (user$ | async; as user) {
 <div class="max-w-5xl mx-auto mt-10 p-6 bg-base-300 rounded-xl shadow-lg space-y-7 border border-base-100 hover:shadow-xl transition-shadow">
   <!-- Header -->
+    <!-- Avatar -->
   <div class="flex items-center gap-6">
     <div class="avatar">
       <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
         <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
       </div>
     </div>
+
+    <!-- User Info -->
     <div>
-      <h2 class="text-3xl font-bold text-base-content">{{ user.firstName }} {{ user.lastName }}</h2>
+      <h2 class="text-3xl font-bold text-base-content">{{ user.firstName }}</h2>
       <p class="text-sm text-base-content/70">{{ user.email }}</p>
-      @if (user.phone) {
-        <p class="text-sm text-base-content/70">{{ user.phone }}</p>
-      } @else {
-        <p class="text-sm text-warning">
-          <span class="italic">No hay número telefónico</span> —
-          <button class="btn btn-xs btn-outline btn-warning ml-2">
-            Añadir número
+
+      <div class="mt-2">
+        <div class="flex items-center">
+          @if (phoneState.isEditing) {
+            <input 
+              type="tel" 
+              [(ngModel)]="phoneState.newPhoneNumber"
+              class="bg-base-200 input input-bordered input-sm w-full max-w-xs mr-2"
+              [class.outline]="phoneState.isEditing"
+              [disabled]="phoneState.isLoading"
+            />
+          } @else {
+            @if (user.phone) {
+              <span class="text-sm text-base-content/70 mr-2">{{ user.phone }}</span>
+            } @else {
+              <span class="text-sm italic text-warning mr-2">No hay número telefónico</span>
+            }
+          }
+          
+          <button 
+            class="btn btn-xs btn-outline btn-warning"
+            (click)="toggleEditingPhone()"
+            [disabled]="phoneState.isLoading"
+          >
+            @if (phoneState.isLoading) {
+              <span class="loading loading-spinner loading-xs"></span>
+            } @else {
+              @if (phoneState.isEditing) {
+                Guardar
+              } @else {
+                {{ user.phone ? 'Editar' : 'Añadir número' }}
+              }
+            }
           </button>
-        </p>
-      }
+        </div>
+
+        <!-- Info/Error message -->
+        @if (phoneState.error) {
+          <div class="text-error text-xs mt-1">
+            {{ phoneState.error }}
+          </div>
+        }
+      </div>
     </div>
   </div>
 
@@ -33,14 +69,6 @@
       <label class="label font-bold text-base-content">Apellidos</label>
       <input type="text" class="input input-bordered w-full" [value]="user.lastName" disabled />
     </div>
-    <div>
-      <label class="label font-bold text-base-content">Idioma</label>
-      <input type="text" class="input input-bordered w-full" [value]="user.language" disabled />
-    </div>
-    <div>
-      <label class="label font-bold text-base-content">Rol</label>
-      <input type="text" class="input input-bordered w-full" [value]="roleToString(user.role)" disabled />
-    </div>
   </div>
 
   <!-- Preferencias -->
@@ -49,7 +77,7 @@
       <label class="label font-bold text-secondary m-0">Preferencias Dietéticas</label>
       <button class="btn btn-sm btn-outline btn-primary">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14m7-7H5" /></svg>
-        Añadir
+        Editar
       </button>
     </div>
 
@@ -67,7 +95,7 @@
   </div>
 
   <!-- Points and Achievements -->
-  <div class="grid md:grid-cols-2 gap-6">
+  <div class="grid md:grid-cols-3 gap-4">
     <div class="stat bg-base-200 text-base-content rounded-lg">
       <div class="stat-title">Puntos de Lealtad</div>
       <div class="stat-value text-error">{{ user.loyaltyPoints }}</div>
@@ -75,6 +103,10 @@
     <div class="stat bg-base-200 text-base-content rounded-lg">
       <div class="stat-title">Logros Completados</div>
       <div class="stat-value text-secondary">{{ user.achievements.size > 0 ? user.achievements.size : 0 }}</div>
+    </div>
+        <div class="stat bg-base-200 text-base-content rounded-lg">
+      <div class="stat-title">Referidos</div>
+      <div class="stat-value text-error">{{ user.referrals.length }}</div>
     </div>
   </div>
 
@@ -116,12 +148,6 @@
         {{ user.is2FAEnabled ? 'Desactivar 2FA' : 'Activar 2FA' }}
       </button>
     </div>
-  </div>
-
-  <!-- Acciones -->
-  <div class="flex justify-end mt-4 gap-2">
-    <button class="btn btn-outline" (click)="sendToHome()">Salir</button>
-    <button class="btn btn-primary">Guardar Cambios</button>
   </div>
 </div>
 }
