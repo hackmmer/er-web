@@ -1,8 +1,10 @@
 <div class="flex min-h-screen">
   <!-- Botón de flecha para abrir sidebar -->
-  <button type="button" *ngIf="!sidebarOpen" class="md:hidden fixed top-1/2 left-1 z-50 btn btn-primary btn-circle shadow-lg transform -translate-y-1/2" (click)="toggleSidebar()">
-    <i class="fas fa-arrow-right"></i>
-  </button>
+   @if (!sidebarOpen) {
+    <button type="button" class="md:hidden fixed top-1/2 left-1 z-50 btn btn-primary btn-circle shadow-lg transform -translate-y-1/2" (click)="toggleSidebar()">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+   }
 
   <!-- Sidebar -->
   <div class="admin-sidebar w-64 min-h-screen flex flex-col fixed md:static transform transition-transform duration-300 mt-2 z-50" [class.-translate-x-full]="!sidebarOpen"
@@ -78,15 +80,19 @@
   </div>
 
   <!-- Overlay para móviles -->
-  <div *ngIf="sidebarOpen" (click)="toggleSidebar()" 
+   @if (sidebarOpen) {
+    <div (click)="toggleSidebar()" 
        class="md:hidden fixed inset-0 bg-base-200 z-40"></div>
+   }
 
   <!-- Contenedor principal de contenido -->
   <div class="flex-1 p-4 sm:ml-64 md:ml-0 mt-0 min-h-screen">
     <!-- Mostramos el template activo directamente -->
-    <ng-container *ngIf="activeTemplate">
-      <ng-container *ngTemplateOutlet="activeTemplate"></ng-container>
-    </ng-container>
+     @if (activeTemplate) {
+      <ng-container>
+        <ng-container *ngTemplateOutlet="activeTemplate"></ng-container>
+      </ng-container>
+     }
   </div>
 </div>
 
@@ -102,46 +108,53 @@
     </button>
 
     <!-- Menú desplegable -->
-    <div *ngIf="floatingMenuOpen" 
-         class="absolute bottom-full right-0 mb-2 w-48 rounded-lg shadow-xl overflow-hidden z-50 animate-fadeIn">
-      <ul>
-        <li>
-          <button type="button" 
-                  class="w-full text-left px-4 py-3 text-sm flex items-center"
-                  (click)="show_modal_product = true">
-            {{ 'admin.add_product' | translate }}
-          </button>
-        </li>
-        <li>
-          <button type="button" 
-                  class="w-full text-left px-4 py-3 text-sm flex items-center"
-                  (click)="show_modal_ingredients = true">
-            {{ 'admin.add_ingredients' | translate }}
-          </button>
-        </li>
-        <li>
-          <button type="button" 
-                  class="w-full text-left px-4 py-3 text-sm flex items-center"
-                  (click)="show_modal_category = true">
-            {{ 'admin.add_category' | translate }}
-          </button>
-        </li>
-      </ul>
-    </div>
+     @if (floatingMenuOpen) {
+      <div class="absolute bottom-full right-0 mb-2 w-48 rounded-lg shadow-xl overflow-hidden z-50 animate-fadeIn">
+        <ul>
+          <li>
+            <button type="button" 
+                    class="w-full text-left px-4 py-3 text-sm flex items-center"
+                    (click)="show_modal_product = true">
+              {{ 'admin.add_product' | translate }}
+            </button>
+          </li>
+          <li>
+            <button type="button" 
+                    class="w-full text-left px-4 py-3 text-sm flex items-center"
+                    (click)="show_modal_ingredients = true">
+              {{ 'admin.add_ingredients' | translate }}
+            </button>
+          </li>
+          <li>
+            <button type="button" 
+                    class="w-full text-left px-4 py-3 text-sm flex items-center"
+                    (click)="show_modal_category = true">
+              {{ 'admin.add_category' | translate }}
+            </button>
+          </li>
+        </ul>
+      </div>
+     }
   </div>
   
   <!-- Overlay para cerrar el menú al hacer clic fuera -->
-  <div *ngIf="floatingMenuOpen" 
-       class="fixed inset-0 z-40 bg-black bg-opacity-10"
+   @if (floatingMenuOpen) {
+    <div class="fixed inset-0 z-40 bg-base-300 bg-opacity-10"
        (click)="floatingMenuOpen = false"></div>
-</div>
 
+   }
+</div>
 <!-- Templates para cada sección -->
 <ng-template #productsTemplate>
-  <div class="p-4">
-    <h2 class="text-2xl font-bold mb-4">{{'admin.products' | translate}}</h2>
-    <!-- Contenido de productos aquí -->
-  </div>
+  <app-data-table  [columns]="columns_products" [data]="products"></app-data-table>
+</ng-template>
+
+<ng-template #ingredientsTemplate>
+  <app-data-table  [columns]="columns_ingredients" [data]="ingredients"></app-data-table>
+</ng-template>
+
+<ng-template #categoriesTemplate>
+  <app-data-table  [columns]="columns_category" [data]="categories"></app-data-table>
 </ng-template>
 
 <ng-template #promosTemplate>
@@ -179,22 +192,7 @@
   </div>
 </ng-template>
 
-<ng-template #ingredientsTemplate>
-  <div class="p-4">
-    <h2 class="text-2xl font-bold mb-4">{{'admin.ingredients' | translate}}</h2>
-    <!-- Contenido de configuración aquí -->
-  </div>
-</ng-template>
-
-<ng-template #categoryTemplate>
-  <div class="p-4">
-    <h2 class="text-2xl font-bold mb-4">{{'admin.categories' | translate}}</h2>
-    <!-- Contenido de configuración aquí -->
-  </div>
-</ng-template>
-
-
-
+<!-- Add or Edit -->
 <app-add-edit-modal [isOpen]="show_modal_product" (closeModal)="show_modal_product = false"></app-add-edit-modal>
 <app-add-edit-ingredients [isOpen]="show_modal_ingredients" (closeModal)="show_modal_ingredients = false"></app-add-edit-ingredients>
 <app-add-edit-category [isOpen]="show_modal_category" (closeModal)="show_modal_category=false"></app-add-edit-category>

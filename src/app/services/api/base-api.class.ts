@@ -40,4 +40,16 @@ export abstract class BaseApi {
       }
     );
   }
+
+  delete<T = any>(options?:ApiOptions){
+    return this.http.delete<T>(`${this.fullUrl}/${options?.endpoint ?? ''}`);
+  }
+
+  patch<T = any>(options?: ApiOptions) {
+    return this.http.patch<T>(`${this.fullUrl}/${options?.endpoint ?? ''}`, options?.body ?? '',
+      {
+        params: options?.params,
+      }
+    );
+  }
 }
