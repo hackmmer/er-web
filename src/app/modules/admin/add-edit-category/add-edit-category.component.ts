@@ -33,7 +33,6 @@ export class AddEditCategoryComponent implements OnChanges {
 
   onSubmit(): void {
     if (this.categoryform.valid) {
-      console.log(this.categoryform.value as ICategory)
       this.api.category.create(this.categoryform.value as ICategory).subscribe(
           {
             next: () => {

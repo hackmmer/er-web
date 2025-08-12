@@ -116,7 +116,6 @@ export class AddEditModalComponent implements OnChanges {
   // Enviar formulario
   onSubmit(): void {
     if (this.productForm.valid) {
-      console.log(this.productForm.value as IProductCreate)
       this.api.products.create_product(this.productForm.value as IProductCreate).subscribe(
         {
           next: () => {

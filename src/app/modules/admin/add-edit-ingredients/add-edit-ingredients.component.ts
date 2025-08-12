@@ -101,7 +101,6 @@ export class AddEditIngredientsComponent implements OnChanges {
 
   onSubmit(): void {
     if (this.ingredientForm.valid) {
-      console.log(this.ingredientForm.value as IIngredient)
       this.api.ingredients.create({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredient).subscribe(
           {
             next: () => {
