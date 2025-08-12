@@ -1,0 +1,33 @@
+<div class="modal" [class.modal-open]="isOpen()">
+    <div class="modal-box w-11/12 max-w-3xl">
+      <button (click)="handleClose()" class="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
+      <h3 class="font-bold text-xl">{{ isEdit() ? 'Editar' : 'Crear' }} Categoria</h3>
+      
+      <form [formGroup]="categoryform" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label">
+                <span class="label-text">Nombre*</span>
+                </label>
+                <input 
+                type="text" 
+                formControlName="name" 
+                class="input input-bordered" 
+                placeholder="Nombre de la Categoria"
+                >
+            </div>
+        </div>
+
+        <div class="modal-action">
+          <button type="button" (click)="handleClose()" class="btn">Cancelar</button>
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="categoryform.invalid"
+          >
+            {{ isEdit() ? 'Actualizar' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -81,6 +81,11 @@ export const locale = {
       'users':'Usuarios',
       'settings':'Ajustes',
       'testimonials':'Testimonios',
+      'ingredients':'Ingredientes',
+      'categories':'Categorias',
+      'add_product':'Añadir Producto',
+      'add_ingredients':'Añadir Ingredientes',
+      'add_category': 'Añadir Categoria',
     },
     others:{
       'hot':'Caliente',

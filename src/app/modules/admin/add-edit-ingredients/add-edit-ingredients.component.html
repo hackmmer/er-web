@@ -1,9 +1,9 @@
 <div class="modal" [class.modal-open]="isOpen()">
-    <div class="modal-box w-11/12 max-w-5xl">
+    <div class="modal-box w-11/12 max-w-3xl">
       <button (click)="handleClose()" class="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
-      <h3 class="font-bold text-xl">{{ isEdit() ? 'Editar' : 'Crear' }} Producto</h3>
+      <h3 class="font-bold text-xl">{{ isEdit() ? 'Editar' : 'Crear' }} Ingrediente</h3>
       
-      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
+      <form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control">
             <label class="label">
@@ -13,7 +13,7 @@
               type="text" 
               formControlName="name" 
               class="input input-bordered" 
-              placeholder="Nombre del producto"
+              placeholder="Nombre del ingrediente"
             >
           </div>
 
@@ -32,14 +32,11 @@
 
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Tiempo Preparación (min)</span>
+              <span class="label-text">Unidad*</span>
             </label>
-            <input 
-              type="number" 
-              formControlName="preparationTime" 
-              class="input input-bordered" 
-              min="0"
-            >
+            <select formControlName="unit" class="select select-bordered w-full">
+              <option *ngFor="let unit of unitTypes" [value]="unit">{{ unit }}</option>
+            </select>
           </div>
 
           <div class="form-control">
@@ -56,10 +53,10 @@
 
           <div class="form-control">
             <label class="label cursor-pointer">
-              <span class="label-text">Disponible*</span>
+              <span class="label-text">Es Alérgeno*</span>
               <input 
                 type="checkbox" 
-                formControlName="isAvailable" 
+                formControlName="isAlergen" 
                 class="toggle toggle-primary"
               >
             </label>
@@ -67,7 +64,7 @@
 
           <div class="form-control">
             <label class="label cursor-pointer">
-              <span class="label-text">Es Vegetariano</span>
+              <span class="label-text">Es Vegetariano*</span>
               <input 
                 type="checkbox" 
                 formControlName="isVegetarian" 
@@ -78,7 +75,7 @@
 
           <div class="form-control">
             <label class="label cursor-pointer">
-              <span class="label-text">Es Vegano</span>
+              <span class="label-text">Es Vegano*</span>
               <input 
                 type="checkbox" 
                 formControlName="isVegan" 
@@ -88,82 +85,25 @@
           </div>
         </div>
 
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Descripción</span>
-          </label>
-          <textarea 
-            formControlName="description" 
-            class="textarea textarea-bordered" 
-            placeholder="Descripción"
-          ></textarea>
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">URL de la Imagen</span>
-          </label>
-          <input 
-            type="text" 
-            formControlName="imageUrl" 
-            class="input input-bordered" 
-            placeholder="https://ejemplo.com/imagen.jpg"
-          >
-        </div>
-
-        <!-- Selector de Ingredientes -->
-        <div class="mt-6">
-
-          <div class="mt-2">
-            <label class="label">
-              <span class="label-text">Ingredientes*</span>
+        <!-- Alérgenos (solo si es alérgeno) -->
+        <div *ngIf="ingredientForm.get('isAlergen')?.value" class="mt-4">
+          <h4 class="font-bold text-lg mb-2">Tipos de Alérgenos</h4>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <label *ngFor="let alergen of alergenTypes" class="label cursor-pointer">
+              <span class="label-text">{{ alergen }}</span>
+              <input 
+                type="checkbox" 
+                [value]="alergen"
+                (change)="onAlergenChange($event)"
+                [checked]="isAlergenSelected(alergen)"
+                class="checkbox checkbox-primary"
+              >
             </label>
-            <select 
-              class="select select-bordered w-full"
-              (change)="onIngredientSelect($event)"
-            >
-              <option value="" disabled selected>Selecciona ingredientes</option>
-              <option *ngFor="let ingredient of ingredients" [value]="ingredient._id">
-                {{ ingredient.name }} ({{ ingredient.price | currency:'EUR' }})
-              </option>
-            </select>
-
-            <!-- Lista de ingredientes seleccionados -->
-            <div class="mt-4">
-              <div class="overflow-x-auto">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>Unidad</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let ingredientId of productForm.get('ingredients')?.value; let i = index">
-                      <td>{{ getIngredientName(ingredientId) }}</td>
-                      <td>{{ getIngredientPrice(ingredientId) | currency:'EUR' }}</td>
-                      <td>{{ getIngredientUnit(ingredientId) }}</td>
-                      <td>
-                        <button 
-                          type="button" 
-                          (click)="removeIngredient(i)" 
-                          class="btn btn-sm btn-error"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
 
-        <div class="mt-2">
-          <label class="label">
+        <div class="form-control">
+            <label class="label">
               <span class="label-text">Categorias*</span>
             </label>
             <select
@@ -186,9 +126,9 @@
                       <th>Acciones</th>
                     </tr>
                   </thead>
-                  <tbody *ngIf="productForm.get('category')?.value">
+                  <tbody *ngIf="ingredientForm.get('category')?.value">
                     <tr>
-                      <td>{{ getCategoryName(productForm.get('category')?.value) }}</td>
+                      <td>{{ getCategoryName(ingredientForm.get('category')?.value) }}</td>
                       <td>
                         <button 
                           type="button" 
@@ -205,12 +145,23 @@
             </div>
           </div>
 
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Descripción</span>
+          </label>
+          <textarea 
+            formControlName="description" 
+            class="textarea textarea-bordered" 
+            placeholder="Descripción"
+          ></textarea>
+        </div>
+
         <div class="modal-action">
           <button type="button" (click)="handleClose()" class="btn">Cancelar</button>
           <button 
             type="submit" 
             class="btn btn-primary"
-            [disabled]="productForm.invalid"
+            [disabled]="ingredientForm.invalid"
           >
             {{ isEdit() ? 'Actualizar' : 'Guardar' }}
           </button>

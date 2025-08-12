@@ -17,3 +17,22 @@
 .admin-sidebar {
   transition: transform 0.3s ease-in-out;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Rotación del botón cuando el menú está abierto */
+.rotate-45 {
+  transform: rotate(45deg);
+}
+
+/* Estilo para los elementos del menú */
+.floating-menu li button {
+  transition: background-color 0.2s;
+}
