@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Avatars, Client, ID, Models, Storage, UploadProgress } from 'appwrite';
+import {
+  Account,
+  Avatars,
+  Client,
+  ID,
+  Models,
+  Storage,
+  UploadProgress,
+} from 'appwrite';
 import { Subject } from 'rxjs';
 import { environment } from '@env/environment';
 import { Buffer } from 'buffer';
@@ -11,6 +19,7 @@ export class AppwriteService {
   private readonly PROJECT_ID = environment.appwrite.project_id;
   private readonly BUCKET_ID = environment.appwrite.bucket_id;
   private readonly ENDPOINT = environment.appwrite.endpoint;
+  private readonly APIKEY = environment.appwrite.api_key;
 
   private readonly client: Client;
   private readonly storage: Storage;
@@ -21,7 +30,10 @@ export class AppwriteService {
 
   constructor() {
     this.client = new Client();
-    this.client.setEndpoint(this.ENDPOINT).setProject(this.PROJECT_ID);
+    this.client
+      .setEndpoint(this.ENDPOINT)
+      .setProject(this.PROJECT_ID)
+      .setDevKey(this.APIKEY);
 
     // Init Services
     this.storage = new Storage(this.client);
@@ -51,9 +63,12 @@ export class AppwriteService {
     return id;
   }
 
+  async deleteFile(fileId: string) {
+    return await this.storage.deleteFile(this.BUCKET_ID, fileId);
+  }
+
   // This only generates the url of the file for view
   getFileViewUrl(id: string) {
     return this.storage.getFileView(this.BUCKET_ID, id);
   }
-
 }

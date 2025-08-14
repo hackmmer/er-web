@@ -2,17 +2,16 @@
     <div class="modal-box w-11/12 max-w-5xl">
       <button (click)="handleClose()" class="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
       <h3 class="font-bold text-xl">{{ isEdit() ? 'Editar' : 'Crear' }} Producto</h3>
-      
       <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Nombre*</span>
             </label>
-            <input 
-              type="text" 
-              formControlName="name" 
-              class="input input-bordered" 
+            <input
+              type="text"
+              formControlName="name"
+              class="input input-bordered"
               placeholder="Nombre del producto"
             >
           </div>
@@ -21,11 +20,11 @@
             <label class="label">
               <span class="label-text">Precio* (€)</span>
             </label>
-            <input 
-              type="number" 
-              formControlName="price" 
-              class="input input-bordered" 
-              min="0" 
+            <input
+              type="number"
+              formControlName="price"
+              class="input input-bordered"
+              min="0"
               step="0.01"
             >
           </div>
@@ -34,10 +33,10 @@
             <label class="label">
               <span class="label-text">Tiempo Preparación (min)</span>
             </label>
-            <input 
-              type="number" 
-              formControlName="preparationTime" 
-              class="input input-bordered" 
+            <input
+              type="number"
+              formControlName="preparationTime"
+              class="input input-bordered"
               min="0"
             >
           </div>
@@ -46,10 +45,10 @@
             <label class="label">
               <span class="label-text">Stock*</span>
             </label>
-            <input 
-              type="number" 
-              formControlName="stock" 
-              class="input input-bordered" 
+            <input
+              type="number"
+              formControlName="stock"
+              class="input input-bordered"
               min="0"
             >
           </div>
@@ -57,9 +56,9 @@
           <div class="form-control">
             <label class="label cursor-pointer">
               <span class="label-text">Disponible*</span>
-              <input 
-                type="checkbox" 
-                formControlName="isAvailable" 
+              <input
+                type="checkbox"
+                formControlName="isAvailable"
                 class="toggle toggle-primary"
               >
             </label>
@@ -68,9 +67,9 @@
           <div class="form-control">
             <label class="label cursor-pointer">
               <span class="label-text">Es Vegetariano</span>
-              <input 
-                type="checkbox" 
-                formControlName="isVegetarian" 
+              <input
+                type="checkbox"
+                formControlName="isVegetarian"
                 class="toggle toggle-primary"
               >
             </label>
@@ -79,9 +78,9 @@
           <div class="form-control">
             <label class="label cursor-pointer">
               <span class="label-text">Es Vegano</span>
-              <input 
-                type="checkbox" 
-                formControlName="isVegan" 
+              <input
+                type="checkbox"
+                formControlName="isVegan"
                 class="toggle toggle-primary"
               >
             </label>
@@ -92,9 +91,9 @@
           <label class="label">
             <span class="label-text">Descripción</span>
           </label>
-          <textarea 
-            formControlName="description" 
-            class="textarea textarea-bordered" 
+          <textarea
+            formControlName="description"
+            class="textarea textarea-bordered"
             placeholder="Descripción"
           ></textarea>
         </div>
@@ -103,11 +102,11 @@
           <label class="label">
             <span class="label-text">URL de la Imagen</span>
           </label>
-          <input 
-            type="text" 
-            formControlName="imageUrl" 
-            class="input input-bordered" 
-            placeholder="https://ejemplo.com/imagen.jpg"
+            <!-- formControlName="imageUrl"  -->
+            <input
+            type="file"
+            class="input input-bordered"
+            (change)="onImagePicked($event)"
           >
         </div>
 
@@ -118,7 +117,7 @@
             <label class="label">
               <span class="label-text">Ingredientes*</span>
             </label>
-            <select 
+            <select
               class="select select-bordered w-full"
               (change)="onIngredientSelect($event)"
             >
@@ -146,9 +145,9 @@
                       <td>{{ getIngredientPrice(ingredientId) | currency:'EUR' }}</td>
                       <td>{{ getIngredientUnit(ingredientId) }}</td>
                       <td>
-                        <button 
-                          type="button" 
-                          (click)="removeIngredient(i)" 
+                        <button
+                          type="button"
+                          (click)="removeIngredient(i)"
                           class="btn btn-sm btn-error"
                         >
                           Eliminar
@@ -190,9 +189,9 @@
                     <tr>
                       <td>{{ getCategoryName(productForm.get('category')?.value) }}</td>
                       <td>
-                        <button 
-                          type="button" 
-                          (click)="removeCategory()" 
+                        <button
+                          type="button"
+                          (click)="removeCategory()"
                           class="btn btn-sm btn-error"
                         >
                           Eliminar
@@ -207,8 +206,8 @@
 
         <div class="modal-action">
           <button type="button" (click)="handleClose()" class="btn">Cancelar</button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="btn btn-primary"
             [disabled]="productForm.invalid"
           >
