@@ -1,12 +1,13 @@
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddEditModalComponent } from './add-edit-modal/add-edit-modal.component';
 import { AddEditIngredientsComponent } from './add-edit-ingredients/add-edit-ingredients.component';
 import { AddEditCategoryComponent } from './add-edit-category/add-edit-category.component';
 import { ApiService } from '@services/api/api.service';
 import { ICategory, IIngredient, IProduct } from '@models/product';
 import { DataTableComponent } from '../../components/data-table/data-table.component';
+import { DeleteIdComponent } from './delete-id/delete-id.component';
 
 @Component({
   selector: 'app-admin',
@@ -16,7 +17,8 @@ import { DataTableComponent } from '../../components/data-table/data-table.compo
     AddEditModalComponent,
     AddEditIngredientsComponent, 
     AddEditCategoryComponent,
-    DataTableComponent
+    DataTableComponent,
+    DeleteIdComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
@@ -31,7 +33,10 @@ export class AdminComponent {
   show_modal_category = false;
   show_modal_delete = false;
   
-  isedit:boolean=false
+  data_product!:IProduct
+  data_delete!:{id:string, title:string}
+  data_category!:ICategory
+  data_ingredient!:IIngredient
 
   floatingMenuOpen = false;
 
@@ -64,7 +69,7 @@ export class AdminComponent {
     { key: 'isAvailable', label: 'Disponible' },
     { key: 'preparationTime', label: 'Tiempo Preparación (min)' }]
 
-  constructor(private api:ApiService){
+  constructor(private api:ApiService, private translate:TranslateService){
     this.init_data()
   }
 
@@ -78,10 +83,6 @@ export class AdminComponent {
     this.api.products.findAll().subscribe(e=>{
       this.products=e
     })
-  }
-
-  toggleFloatingMenu() {
-    this.floatingMenuOpen = !this.floatingMenuOpen;
   }
   
   // Definimos los templates como propiedades públicas
@@ -109,6 +110,16 @@ export class AdminComponent {
     }
   }
 
+  add_button(){
+    if(this.activeItem==='products'){
+      this.show_modal_product = true;
+    }else if(this.activeItem==='ingredients'){
+      this.show_modal_ingredients = true;
+    }else if(this.activeItem==='categories'){
+      this.show_modal_category = true;
+    }
+  }
+
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
   }
@@ -118,5 +129,23 @@ export class AdminComponent {
     if (this.sidebarOpen) {
       this.sidebarOpen = false;
     }
+  }
+
+  edit(data:{id:string, data:any, title:string}){
+    if(data.title === this.translate.instant('admin.product')){
+        this.data_product = data.data;
+        this.show_modal_product = true;
+    }else if(data.title === this.translate.instant('admin.ingredient')){
+        this.data_product = data.data;
+        this.show_modal_ingredients = true;
+    }else if(data.title === this.translate.instant('admin.category')){
+        this.data_product = data.data;
+        this.show_modal_category = true;
+    }
+  }
+
+  delete(data:{id:string, title:string}){
+    this.data_delete=data;
+    this.show_modal_delete = true;
   }
 }

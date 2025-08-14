@@ -26,7 +26,7 @@ export class IngredientsService extends BaseApi implements CRUD<IIngredient>{
         return this.get<IIngredient>({ endpoint: id });
     }
 
-    remove(id: string): Observable<IIngredient | any> {
+    remove(id?: string): Observable<IIngredient | any> {
         return this.delete<IIngredient>({endpoint:id});
     }
 

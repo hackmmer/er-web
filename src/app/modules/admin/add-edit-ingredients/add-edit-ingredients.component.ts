@@ -11,7 +11,7 @@ import { ApiService } from '@services/api/api.service';
   styleUrl: './add-edit-ingredients.component.css'
 })
 export class AddEditIngredientsComponent implements OnChanges {
-  isEdit=input<IIngredient | null>(null);
+  data=input<IIngredient | null>(null);
   isLoading: boolean = false;
   isOpen=input();
   closeModal = output();
@@ -43,10 +43,9 @@ export class AddEditIngredientsComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.isEdit()) {
-      this.ingredientForm.patchValue(this.isEdit);
-      // *TODO Rellenar el form si es editado
-      // this.selectedAlergens = [...this.isEdit().alergenTypes];
+    if (this.data()) {
+      this.ingredientForm.patchValue(this.data);
+      // this.selectedAlergens = [...this.data()?.alergenTypes];
     } else if (this.isOpen()) {
       this.ingredientForm.reset({
         unit: UnitTypes.g,
@@ -100,6 +99,7 @@ export class AddEditIngredientsComponent implements OnChanges {
   }
 
   onSubmit(): void {
+    this.isLoading=true
     if (this.ingredientForm.valid) {
       this.api.ingredients.create({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredient).subscribe(
           {

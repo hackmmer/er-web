@@ -23,7 +23,6 @@ import {
 import { ApiService } from '@services/api/api.service';
 import { AppwriteService } from '@services/appwrite.service';
 import { Models } from 'appwrite';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-add-edit-modal',
@@ -35,8 +34,8 @@ export class AddEditModalComponent implements OnChanges {
   readonly appwrite = inject(AppwriteService);
   readonly lastFile = signal<Models.File | null>(null);
 
-  isEdit = input<IProduct | null>(null);
-  isOpen = input();
+  data=input<IProduct | null>(null);
+  isOpen=input();
   closeModal = output();
   productForm: FormGroup;
   isLoading: boolean = false;
@@ -69,13 +68,13 @@ export class AddEditModalComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.isEdit()) {
+  if (this.data()) {
       // Convertir ingredientes a array de IDs
-      // const ingredientIds = this.isEdit().ingredients.map(i => i.id!);
-
+      const ingredientIds = this.data()?.ingredients.map(i => i._id);
+      
       this.productForm.patchValue({
-        ...this.isEdit,
-        // ingredients: ingredientIds
+        ...this.data,
+        ingredients: ingredientIds
       });
     } else if (this.isOpen()) {
       this.productForm.reset({
@@ -141,6 +140,7 @@ export class AddEditModalComponent implements OnChanges {
 
   // Enviar formulario
   onSubmit(): void {
+    this.isLoading=true
     if (this.productForm.valid) {
       this.api.products
         .create_product(this.productForm.value as IProductCreate)

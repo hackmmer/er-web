@@ -30,7 +30,7 @@ export class CategoryService
     });
   }
 
-  remove(id: string): Observable<ICategory | any> {
+  remove(id?: string): Observable<ICategory | any> {
     return this.delete<ICategory>({endpoint:id});
   }
 

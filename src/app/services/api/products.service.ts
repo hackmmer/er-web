@@ -37,7 +37,7 @@ export class ProductsService
     })
   }
 
-  remove(id: string): Observable<IProduct | any> {
+  remove(id?: string): Observable<IProduct | any> {
     return this.delete<IProduct>({endpoint:id});
   }
 }

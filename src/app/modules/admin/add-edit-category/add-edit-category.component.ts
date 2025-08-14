@@ -10,7 +10,7 @@ import { ApiService } from '@services/api/api.service';
   styleUrl: './add-edit-category.component.css'
 })
 export class AddEditCategoryComponent implements OnChanges {
-  isEdit=input<ICategory | null>(null);
+  data=input<ICategory | null>(null);
   isLoading: boolean = false;
   isOpen=input();
   closeModal = output();
@@ -24,14 +24,15 @@ export class AddEditCategoryComponent implements OnChanges {
   }
   
   ngOnChanges(): void {
-    if(this.isEdit()){
-      this.categoryform.patchValue(this.isEdit)
+    if(this.data()){
+      this.categoryform.patchValue(this.data)
     }else if(this.isOpen()){
       this.categoryform.reset();
     }
   }
 
   onSubmit(): void {
+    this.isLoading=true
     if (this.categoryform.valid) {
       this.api.category.create(this.categoryform.value as ICategory).subscribe(
           {
