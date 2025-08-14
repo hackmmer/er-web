@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UsersService } from '@services/api/users.service';
 import { Observable, take } from 'rxjs';
 import { IUser } from '@models/user';
+import { ProfilePipe } from "@pipes/profile.pipe";
 
 abstract class BaseEditState {
   isEditing: boolean = false;
@@ -38,7 +39,7 @@ abstract class BaseEditState {
 class PhoneEditState extends BaseEditState {
   newPhoneNumber: string = '';
 
-  protected override resetState() {  
+  protected override resetState() {
     this.newPhoneNumber = '';
   }
 }
@@ -46,14 +47,14 @@ class PhoneEditState extends BaseEditState {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProfilePipe],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
   user$!: Observable<IUser>;
   phoneState: PhoneEditState = new PhoneEditState();
-  
+
   constructor(
     private usersService: UsersService,
     private router: Router
@@ -77,14 +78,14 @@ export class ProfileComponent implements OnInit {
     } else {                          // If click "Editar" or "Añadir numero"
       this.user$.pipe(take(1)).subscribe(user => {
         this.phoneState.newPhoneNumber = user.phone || '';  // Get the current phone number
-        this.phoneState.isEditing = true; 
+        this.phoneState.isEditing = true;
       });
     }
   }
 
   saveNewPhoneNumber(): void {
     this.phoneState.startLoading();
-    
+
     this.usersService.updateUserPhone(this.phoneState.newPhoneNumber).subscribe({
       next: (updatedUser) => {
         this.user$ = this.loadUser();
