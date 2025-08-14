@@ -47,7 +47,7 @@
                     </div>
                 </div>
              }
-            
+
             <!-- Theme switcher -->
             <label class="toggle text-base-content">
                 <input type="checkbox" [value]="theme" class="theme-controller" (click)="toggleTheme()" />
@@ -67,7 +67,7 @@
                             priority
                             width="14"
                             height="14"
-                            [ngSrc]="appwrite.getInitials( user.firstName )" />
+                            [ngSrc]="user | profile" />
                         </div>
                     </div>
                     <ul

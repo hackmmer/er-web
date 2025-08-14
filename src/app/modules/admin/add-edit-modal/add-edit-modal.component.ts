@@ -1,27 +1,50 @@
 import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
-import { Component, input, OnChanges, output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ICategory, IIngredient, IProduct, IProductCreate, UnitTypes } from '@models/product';
+import {
+  Component,
+  inject,
+  input,
+  OnChanges,
+  output,
+  signal,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  ICategory,
+  IIngredient,
+  IProduct,
+  IProductCreate,
+  UnitTypes,
+} from '@models/product';
 import { ApiService } from '@services/api/api.service';
+import { AppwriteService } from '@services/appwrite.service';
+import { Models } from 'appwrite';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-add-edit-modal',
   imports: [ReactiveFormsModule, NgFor, CurrencyPipe, NgIf],
   templateUrl: './add-edit-modal.component.html',
-  styleUrl: './add-edit-modal.component.css'
+  styleUrl: './add-edit-modal.component.css',
 })
 export class AddEditModalComponent implements OnChanges {
+  readonly appwrite = inject(AppwriteService);
+  readonly lastFile = signal<Models.File | null>(null);
 
-  isEdit=input<IProduct | null>(null);
-  isOpen=input();
+  isEdit = input<IProduct | null>(null);
+  isOpen = input();
   closeModal = output();
   productForm: FormGroup;
   isLoading: boolean = false;
-  ingredients:IIngredient[]=[]
+  ingredients: IIngredient[] = [];
 
-  categories:ICategory[]=[]
+  categories: ICategory[] = [];
 
-  constructor(private fb: FormBuilder, private api:ApiService) {
+  constructor(private fb: FormBuilder, private api: ApiService) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
@@ -33,23 +56,23 @@ export class AddEditModalComponent implements OnChanges {
       ingredients: [[] as string[], Validators.required],
       isVegetarian: [false],
       isVegan: [false],
-      preparationTime: [0, Validators.min(0)]
+      preparationTime: [0, Validators.min(0)],
     });
 
-    this.api.ingredients.findAll().subscribe(e=>{
+    this.api.ingredients.findAll().subscribe((e) => {
       this.ingredients = e;
-    })
+    });
 
-    this.api.category.findAll().subscribe(e=>{
-      this.categories=e;
-    })
+    this.api.category.findAll().subscribe((e) => {
+      this.categories = e;
+    });
   }
 
   ngOnChanges(): void {
-  if (this.isEdit()) {
+    if (this.isEdit()) {
       // Convertir ingredientes a array de IDs
       // const ingredientIds = this.isEdit().ingredients.map(i => i.id!);
-      
+
       this.productForm.patchValue({
         ...this.isEdit,
         // ingredients: ingredientIds
@@ -57,19 +80,19 @@ export class AddEditModalComponent implements OnChanges {
     } else if (this.isOpen()) {
       this.productForm.reset({
         isAvailable: true,
-        ingredients: []
+        ingredients: [],
       });
     }
   }
 
   getCategoryName(id: string): string {
-    return this.categories.find(c => c._id === id)?.name || '';
+    return this.categories.find((c) => c._id === id)?.name || '';
   }
 
   onCategorySelect(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const categoryId = select.value;
-    
+
     if (categoryId) {
       this.productForm.get('category')?.setValue(categoryId);
       select.value = '';
@@ -81,28 +104,31 @@ export class AddEditModalComponent implements OnChanges {
   }
 
   getIngredientName(id: string): string {
-    return this.ingredients.find(i => i._id === id)?.name || 'Desconocido';
+    return this.ingredients.find((i) => i._id === id)?.name || 'Desconocido';
   }
 
   getIngredientPrice(id: string): number {
-    return this.ingredients.find(i => i._id === id)?.price || 0;
+    return this.ingredients.find((i) => i._id === id)?.price || 0;
   }
 
   getIngredientUnit(id: string): UnitTypes {
-    return this.ingredients.find(i => i._id === id)?.unit || UnitTypes.unidad;
+    return this.ingredients.find((i) => i._id === id)?.unit || UnitTypes.unidad;
   }
 
   onIngredientSelect(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const ingredientId = select.value;
-    
+
     if (ingredientId) {
-      const currentIngredients = this.productForm.get('ingredients')?.value as string[] || [];
-      
+      const currentIngredients =
+        (this.productForm.get('ingredients')?.value as string[]) || [];
+
       if (!currentIngredients.includes(ingredientId)) {
-        this.productForm.get('ingredients')?.setValue([...currentIngredients, ingredientId]);
+        this.productForm
+          .get('ingredients')
+          ?.setValue([...currentIngredients, ingredientId]);
       }
-      
+
       select.value = '';
     }
   }
@@ -116,19 +142,41 @@ export class AddEditModalComponent implements OnChanges {
   // Enviar formulario
   onSubmit(): void {
     if (this.productForm.valid) {
-      this.api.products.create_product(this.productForm.value as IProductCreate).subscribe(
-        {
+      this.api.products
+        .create_product(this.productForm.value as IProductCreate)
+        .subscribe({
           next: () => {
             this.isLoading = false;
             this.handleClose();
           },
           error: (e) => {
             this.isLoading = false;
-            console.log(e)
-          }
-        }
-      )
+            console.log(e);
+          },
+        });
     }
+  }
+
+  async onImagePicked(event: Event) {
+    const fileInput: HTMLInputElement = event.target as HTMLInputElement; // Here we use only the first file (single file)
+    if (!fileInput.files) return;
+    const file = fileInput?.files[0];
+    this.appwrite.fileCreated.subscribe((f) => {
+      this.lastFile.set(f);
+      const url = this.appwrite.getFileViewUrl(f.$id);
+      this.productForm.patchValue({ imageUrl: url });
+    });
+
+    // Upload progress never called (Why?)
+    // take a look in future changes
+    //
+    // this.appwrite.uploadProgress.subscribe((u) => {
+    //   console.log(u)
+    // })
+    const last = this.lastFile()
+    if (last && last?.$id)
+      await this.appwrite.deleteFile(last.$id);
+    this.appwrite.createFile(file);
   }
 
   // Cerrar modal

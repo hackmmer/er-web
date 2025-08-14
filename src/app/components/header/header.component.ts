@@ -8,10 +8,11 @@ import { NgOptimizedImage } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { IUser } from '@models/user';
 import { ApiService } from '@services/api/api.service';
+import { ProfilePipe } from "@pipes/profile.pipe";
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, TranslatePipe, LoginComponent, NgOptimizedImage],
+  imports: [RouterLink, TranslatePipe, LoginComponent, NgOptimizedImage, ProfilePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

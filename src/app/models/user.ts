@@ -27,6 +27,8 @@ export interface IUser {
 
   firstName: string;
   lastName: string;
+  fullName: string;
+  profileImage?: string;
   email: string;
   phone?: string;
   role: EnumRoleUser;

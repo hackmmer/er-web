@@ -5,7 +5,7 @@
   <div class="flex items-center gap-6">
     <div class="avatar">
       <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-        <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        <img [alt]="user.firstName" [src]="user | profile" />
       </div>
     </div>
 
@@ -17,8 +17,8 @@
       <div class="mt-2">
         <div class="flex items-center">
           @if (phoneState.isEditing) {
-            <input 
-              type="tel" 
+            <input
+              type="tel"
               [(ngModel)]="phoneState.newPhoneNumber"
               class="bg-base-200 input input-bordered input-sm w-full max-w-xs mr-2"
               [class.outline]="phoneState.isEditing"
@@ -31,8 +31,8 @@
               <span class="text-sm italic text-warning mr-2">No hay número telefónico</span>
             }
           }
-          
-          <button 
+
+          <button
             class="btn btn-xs btn-outline btn-warning"
             (click)="toggleEditingPhone()"
             [disabled]="phoneState.isLoading"
@@ -116,9 +116,9 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       @for (channel of [user.notificationChannels.email, user.notificationChannels.sms, user.notificationChannels.whatsapp, user.notificationChannels.push]; track $index) {
         <label class="flex items-center gap-2">
-          <input 
-            type="checkbox" 
-            class="checkbox" 
+          <input
+            type="checkbox"
+            class="checkbox"
             [checked]="channel"
             [ngClass]="channel ? 'checkbox-primary' : ''"
             />
