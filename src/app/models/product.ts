@@ -1,5 +1,5 @@
 export interface IIngredient {
-  _id?:string;
+  _id?: string;
 
   name: string;
 
@@ -9,7 +9,7 @@ export interface IIngredient {
 
   alergenTypes: AlergenTypes[];
 
-  category: string;
+  category: ICategory;
 
   stock: number;
 
@@ -19,12 +19,12 @@ export interface IIngredient {
 
   isVegan: boolean;
 
-  unit:UnitTypes;
+  unit: UnitTypes;
 }
 
-export interface ICategory{
-  _id?:string;
-  name:string;
+export interface ICategory {
+  _id?: string;
+  name: string;
 }
 
 export enum AlergenTypes {
@@ -52,7 +52,7 @@ export enum UnitTypes {
 }
 
 export interface IProduct {
-  _id?:string;
+  _id?: string;
 
   name: string;
 
@@ -66,7 +66,7 @@ export interface IProduct {
 
   stock: number;
 
-  category: string;
+  category: ICategory;
 
   ingredients: IIngredient[];
 
@@ -77,8 +77,8 @@ export interface IProduct {
   preparationTime?: number;
 }
 
-export interface IProductCreate{
-  _id?:string;
+export interface IProductCreate {
+  _id?: string;
 
   name: string;
 
