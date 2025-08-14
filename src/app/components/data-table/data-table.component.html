@@ -1,8 +1,8 @@
 <div class="mb-4 flex justify-between">
   <h3>{{title}}</h3>
-  <input 
-    type="text" 
-    placeholder="Buscar..." 
+  <input
+    type="text"
+    placeholder="Buscar..."
     class="input input-bordered w-full max-w-xs"
     [(ngModel)]="searchTerm"
     (input)="applyFilter()">
@@ -26,6 +26,9 @@
       <tr *ngFor="let item of filteredData">
         <td *ngFor="let col of columns">
           <ng-container [ngSwitch]="col.key">
+            <ng-container *ngSwitchCase="'category'">
+              {{ item[col.key]?.name ?? '[sin categoria]' }}
+            </ng-container>
             <ng-container *ngSwitchCase="'alergenTypes'">
               {{ item[col.key] | mapAlergenTypes }}
             </ng-container>
