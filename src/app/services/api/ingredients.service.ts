@@ -30,7 +30,7 @@ export class IngredientsService extends BaseApi implements CRUD<IIngredient>{
         return this.delete<IIngredient>({endpoint:id});
     }
 
-    update(id: string, data: IIngredient): Observable<IIngredient | any> {
+    update(id?: string, data?: IIngredient): Observable<IIngredient | any> {
         return this.patch<IIngredient>({
             endpoint:id,
             body:data

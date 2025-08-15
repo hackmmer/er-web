@@ -168,40 +168,23 @@
             </label>
             <select
               class="select select-bordered w-full"
-              (change)="onCategorySelect($event)"
-            >
-              <option value="" disabled selected>Selecciona la Categoria</option>
-              <option *ngFor="let category of categories" [value]="category._id">
+              formControlName="category">
+              <option [value]="null" disabled>Selecciona la Categoría</option>
+              <option *ngFor="let category of categories" 
+                      [value]="category._id"
+                      [selected]="category._id === productForm.get('category')?.value">
                 {{ category.name }}
               </option>
             </select>
 
-            <!-- Lista de ingredientes seleccionados -->
-            <div class="mt-4">
-              <div class="overflow-x-auto">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="productForm.get('category')?.value">
-                    <tr>
-                      <td>{{ getCategoryName(productForm.get('category')?.value) }}</td>
-                      <td>
-                        <button
-                          type="button"
-                          (click)="removeCategory()"
-                          class="btn btn-sm btn-error"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="mt-2" *ngIf="productForm.get('category')?.value">
+              <button
+                type="button"
+                (click)="productForm.get('category')?.setValue('')"
+                class="btn btn-sm btn-error"
+              >
+                Deseleccionar categoría
+              </button>
             </div>
           </div>
 

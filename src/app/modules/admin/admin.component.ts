@@ -136,10 +136,10 @@ export class AdminComponent {
         this.data_product = data.data;
         this.show_modal_product = true;
     }else if(data.title === this.translate.instant('admin.ingredient')){
-        this.data_product = data.data;
+        this.data_ingredient = data.data;
         this.show_modal_ingredients = true;
     }else if(data.title === this.translate.instant('admin.category')){
-        this.data_product = data.data;
+        this.data_category = data.data;
         this.show_modal_category = true;
     }
   }

@@ -34,7 +34,7 @@ export class CategoryService
     return this.delete<ICategory>({endpoint:id});
   }
 
-  update(id: string, data: ICategory): Observable<ICategory | any> {
+  update(id?: string, data?: ICategory): Observable<ICategory | any> {
     return this.patch<ICategory>({
       endpoint:id,
       body:data

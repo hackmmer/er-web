@@ -30,7 +30,7 @@ export class ProductsService
     });
   }
 
-  update_product(id: string, data: IProductCreate): Observable<IProductCreate | any> {
+  update_product(id?: string, data?: IProductCreate): Observable<IProductCreate | any> {
     return this.patch<IProductCreate>({
       endpoint:id,
       body:data
