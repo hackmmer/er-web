@@ -163,7 +163,26 @@
 </ng-template>
 
 <!-- Add or Edit -->
-<app-add-edit-modal [data]="data_product" [isOpen]="show_modal_product" (closeModal)="show_modal_product = false"></app-add-edit-modal>
-<app-add-edit-ingredients [data]="data_ingredient" [isOpen]="show_modal_ingredients" (closeModal)="show_modal_ingredients = false"></app-add-edit-ingredients>
-<app-add-edit-category [data]="data_category" [isOpen]="show_modal_category" (closeModal)="show_modal_category=false"></app-add-edit-category>
-<app-delete-id [data]="data_delete" [isOpen]="show_modal_delete" (closeModal)="show_modal_delete=false"></app-delete-id>
+<app-add-edit-modal 
+  [data]="data_product" 
+  [isOpen]="show_modal_product" 
+  (closeModal)="onCloseProductModal()">
+</app-add-edit-modal>
+
+<app-add-edit-ingredients 
+  [data]="data_ingredient" 
+  [isOpen]="show_modal_ingredients" 
+  (closeModal)="onCloseIngredientModal()">
+</app-add-edit-ingredients>
+
+<app-add-edit-category 
+  [data]="data_category" 
+  [isOpen]="show_modal_category" 
+  (closeModal)="onCloseCategoryModal()">
+</app-add-edit-category>
+
+<app-delete-id 
+  [data]="data_delete" 
+  [isOpen]="show_modal_delete" 
+  (closeModal)="onCloseDeleteModal()">
+</app-delete-id>
