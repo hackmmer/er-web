@@ -10,7 +10,11 @@ import {
 import { Router } from '@angular/router';
 import { UsersService } from '@services/api/users.service';
 import { Observable, take } from 'rxjs';
-import { IUser, notificationChannelsEnum } from '@models/user';
+import {
+  IUser,
+  IUserNotificationChannels,
+  notificationChannelsEnum,
+} from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
 
 abstract class BaseEditState {
@@ -82,25 +86,22 @@ export class ProfileComponent implements OnInit {
     console.log(data);
     switch (section) {
       case 'profileImage':
-        this.usersService.updateProfileImage(data).subscribe((e) => {
-          console.log(e);
-          this.user.set(e);
-        });
+        this.usersService
+          .updateProfileImage(data)
+          .subscribe((e) => this._afterUpdate(e, section));
         return;
       case 'personalInfo':
-        this.usersService.updatePersonalInfo(data).subscribe((e) => {
-          console.log(e);
-          this.user.set(e);
-        });
+        this.usersService
+          .updatePersonalInfo(data)
+          .subscribe((e) => this._afterUpdate(e, section));
         return;
       case 'dietaryPreferences':
         console.log('Not Implemented Yet');
         return;
       case 'notificationChannels':
-        this.usersService.updateNotificationsChannels(data).subscribe((e) => {
-          console.log(e);
-          this.user.set(e);
-        });
+        this.usersService
+          .updateNotificationsChannels(data)
+          .subscribe((e) => this._afterUpdate(e, section));
         return;
     }
   }
@@ -206,6 +207,13 @@ export class ProfileComponent implements OnInit {
         push: this.fb.control(user?.notificationChannels.push || false, []),
       }),
     });
+  }
+
+  private _afterUpdate(r: IUser, section: string) {
+    console.log(r);
+    this.user.set(r);
+    this.form.get(section)?.markAsUntouched();
+    this.form.get(section)?.markAsPristine();
   }
 
   OBJECTS = Object;
