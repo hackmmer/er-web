@@ -14,7 +14,7 @@ import { Observable, take } from 'rxjs';
 import { IUser, notificationChannelsEnum } from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
 
-abstract class BaseEditState {
+class BaseEditState {
   isEditing: boolean = false;
   isLoading: boolean = false;
   error: string | null = null;
@@ -37,17 +37,6 @@ abstract class BaseEditState {
     this.isEditing = false;
     this.stopLoading();
     this.error = null;
-    this.resetState();
-  }
-
-  protected abstract resetState(): void;
-}
-
-class PhoneEditState extends BaseEditState {
-  newPhoneNumber: string = '';
-
-  protected override resetState() {
-    this.newPhoneNumber = '';
   }
 }
 
@@ -64,14 +53,13 @@ export class ProfileComponent implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
 
   user = signal<IUser | undefined>(undefined);
-  phoneState: PhoneEditState = new PhoneEditState();
+  phoneState: BaseEditState = new BaseEditState();
 
   form!: FormGroup;
 
   ngOnInit(): void {
     this.loadUser().subscribe((user) => {
       this.user.set(user);
-      this.phoneState.newPhoneNumber = user.phone || '';
       this.initUpdateForm(this.user());
     });
 
@@ -95,9 +83,7 @@ export class ProfileComponent implements OnInit {
       // If click "Editar" or "Añadir numero"
       const user = this.user();
       if (!user) return;
-      this.phoneState.newPhoneNumber = user.phone || ''; // Get the current phone number
       this.phoneState.isEditing = true;
-
       this.handleControl(this.form.get('personalInfo.phone'), true);
     }
   }
@@ -108,7 +94,7 @@ export class ProfileComponent implements OnInit {
     this.handleControl(phoneControl, false);
 
     this.usersService
-      .updateUserPhone(this.phoneState.newPhoneNumber)
+      .updateUserPhone(phoneControl?.value)
       .subscribe({
         next: (updatedUser) => {
           this.user.set(updatedUser);
