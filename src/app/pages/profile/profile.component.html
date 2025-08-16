@@ -27,7 +27,6 @@
                 formControlName="phone"
                 class="bg-base-200 input input-bordered input-sm w-full max-w-xs mr-2"
                 [class.outline]="phoneState.isEditing"
-                [disabled]="phoneState.isLoading"
               />
             } @else {
               @if (user.phone) {

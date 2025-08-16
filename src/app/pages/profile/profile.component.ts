@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -96,11 +97,15 @@ export class ProfileComponent implements OnInit {
       if (!user) return;
       this.phoneState.newPhoneNumber = user.phone || ''; // Get the current phone number
       this.phoneState.isEditing = true;
+
+      this.handleControl(this.form.get('personalInfo.phone'), true);
     }
   }
 
   saveNewPhoneNumber(): void {
     this.phoneState.startLoading();
+    const phoneControl = this.form.get('personalInfo.phone');
+    this.handleControl(phoneControl, false);
 
     this.usersService
       .updateUserPhone(this.phoneState.newPhoneNumber)
@@ -108,11 +113,13 @@ export class ProfileComponent implements OnInit {
         next: (updatedUser) => {
           this.user.set(updatedUser);
           this.phoneState.reset();
+          this.handleControl(phoneControl, true);
         },
         error: (err) => {
+          this.handleControl(phoneControl, true);
           this.phoneState.setError(err.error.message[0]);
           // console.error('Update phone error:', err);                 // Just for debug
-        },
+        }
       });
   }
   /* END HANDLE PHONE NUMBER */
@@ -173,7 +180,10 @@ export class ProfileComponent implements OnInit {
       personalInfo: this.fb.group({
         firstName: this.fb.control(user?.firstName || '', []),
         lastName: this.fb.control(user?.lastName || '', []),
-        phone: this.fb.control(user?.phone || '', []),
+        phone: this.fb.control({
+          value: user?.phone || '',
+          disabled: !this.phoneState.isEditing
+        }, [])
       }),
       dietaryPreferences: this.fb.array([], []),
       notificationChannels: this.fb.group({
@@ -186,6 +196,11 @@ export class ProfileComponent implements OnInit {
         push: this.fb.control(user?.notificationChannels.push || false, []),
       }),
     });
+  }
+
+  private handleControl(control: AbstractControl | null, enable: boolean) {
+    enable ? control?.enable() : control?.disable();
+    control?.markAsPristine();
   }
 
   OBJECTS = Object;
