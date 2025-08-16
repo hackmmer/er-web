@@ -1,9 +1,11 @@
 <div class="flex min-h-screen">
   <!-- Botón de flecha para abrir sidebar -->
    @if (!sidebarOpen) {
-    <button type="button" class="md:hidden fixed top-1/2 left-1 z-50 btn btn-primary btn-circle shadow-lg transform -translate-y-1/2" (click)="toggleSidebar()">
-      <i class="fas fa-arrow-right"></i>
-    </button>
+    <button type="button" 
+          class="sidebar-toggle-btn md:hidden fixed top-1/2 z-50 btn btn-secondary shadow-lg transform -translate-y-1/2 h-14 w-8" 
+          (click)="toggleSidebar()">
+    <i class="fas fa-arrow-right text-lg"></i>
+  </button>
    }
 
   <!-- Sidebar -->
