@@ -1,0 +1,12 @@
+@if (isVisible) {
+  <div class="fixed inset-0 z-[1000] flex items-center justify-center">
+    <!-- Fondo -->
+    <div class="absolute inset-0 bg-base-100 opacity-60 backdrop-blur-sm" (click)="preventClose($event)"></div>
+
+    <!-- Contenido centrado -->
+    <div class="relative flex flex-col items-center">
+      <span class="loading text-secondary loading-ring w-16"></span>
+      <p class="logo sm:block text-2xl mt-4 animate-bounce" style="color: #FF3B30"><span style="color: #FFD60A">Er</span><span class="quote text-base-content">'</span>Caliente</p>
+    </div>
+  </div>
+}

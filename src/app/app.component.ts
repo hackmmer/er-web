@@ -6,10 +6,11 @@ import { TranslationService } from './common/i18n/translation.service';
 import { HeaderComponent } from './components/header/header.component';
 
 import { LoadingService } from '@services/loading.service';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, CommonModule],
+  imports: [RouterOutlet, HeaderComponent, LoadingModalComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
