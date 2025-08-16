@@ -33,10 +33,10 @@ export class AdminComponent {
   show_modal_category = false;
   show_modal_delete = false;
   
-  data_product!:IProduct
-  data_delete!:{id:string, title:string}
-  data_category!:ICategory
-  data_ingredient!:IIngredient
+  data_product: IProduct | null = null;
+  data_delete: {id: string, title: string} | null = null;
+  data_category: ICategory | null = null;
+  data_ingredient: IIngredient | null = null;
 
   floatingMenuOpen = false;
 
@@ -136,10 +136,10 @@ export class AdminComponent {
         this.data_product = data.data;
         this.show_modal_product = true;
     }else if(data.title === this.translate.instant('admin.ingredient')){
-        this.data_product = data.data;
+        this.data_ingredient = data.data;
         this.show_modal_ingredients = true;
     }else if(data.title === this.translate.instant('admin.category')){
-        this.data_product = data.data;
+        this.data_category = data.data;
         this.show_modal_category = true;
     }
   }
@@ -147,5 +147,32 @@ export class AdminComponent {
   delete(data:{id:string, title:string}){
     this.data_delete=data;
     this.show_modal_delete = true;
+  }
+
+  onCloseProductModal() {
+    this.show_modal_product = false;
+    this.data_product = null;  // 2. Resetear variable de datos
+    this.init_data();          // 1. Actualizar datos
+  }
+
+  // Función para manejar el cierre del modal de ingredientes
+  onCloseIngredientModal() {
+    this.show_modal_ingredients = false;
+    this.data_ingredient = null;  // 2. Resetear variable de datos
+    this.init_data();             // 1. Actualizar datos
+  }
+
+  // Función para manejar el cierre del modal de categorías
+  onCloseCategoryModal() {
+    this.show_modal_category = false;
+    this.data_category = null;   // 2. Resetear variable de datos
+    this.init_data();            // 1. Actualizar datos
+  }
+
+  // Función para manejar el cierre del modal de eliminación
+  onCloseDeleteModal() {
+    this.show_modal_delete = false;
+    this.data_delete = null;     // 2. Resetear variable de datos
+    this.init_data();            // 1. Actualizar datos
   }
 }

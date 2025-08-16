@@ -22,6 +22,30 @@ export interface IIngredient {
   unit: UnitTypes;
 }
 
+export interface IIngredientCreate {
+  _id?: string;
+
+  name: string;
+
+  price: number;
+
+  description?: string;
+
+  alergenTypes: AlergenTypes[];
+
+  category: string;
+
+  stock: number;
+
+  isAlergen: boolean;
+
+  isVegetarian: boolean;
+
+  isVegan: boolean;
+
+  unit: UnitTypes;
+}
+
 export interface ICategory {
   _id?: string;
   name: string;

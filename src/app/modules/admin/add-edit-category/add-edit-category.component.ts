@@ -24,9 +24,11 @@ export class AddEditCategoryComponent implements OnChanges {
   }
   
   ngOnChanges(): void {
-    if(this.data()){
-      this.categoryform.patchValue(this.data)
-    }else if(this.isOpen()){
+   if (this.data()) {
+      this.categoryform.patchValue({
+        name: this.data()?.name
+      });
+    } else if (this.isOpen()) {
       this.categoryform.reset();
     }
   }
@@ -34,7 +36,10 @@ export class AddEditCategoryComponent implements OnChanges {
   onSubmit(): void {
     this.isLoading=true
     if (this.categoryform.valid) {
-      this.api.category.create(this.categoryform.value as ICategory).subscribe(
+      if(this.data()){
+        this.api.category.update(this.data()!._id, this.categoryform.value as ICategory)
+      }else{
+        this.api.category.create(this.categoryform.value as ICategory).subscribe(
           {
             next: () => {
             this.isLoading = false;
@@ -46,6 +51,8 @@ export class AddEditCategoryComponent implements OnChanges {
           }
         }
       )
+      }
+      
     }
   }
 

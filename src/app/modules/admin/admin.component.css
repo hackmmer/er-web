@@ -1,11 +1,13 @@
 .admin-sidebar {
   background: var(--color-base-200);
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  left: 0; /* Necesario para la animación en posición fija */
 }
 
 @media (max-width: 767px) {
   .admin-sidebar {
     transform: translateX(-100%);
+    position: fixed; /* Asegura posición correcta para animación */
   }
   
   .admin-sidebar[class*="translate-x-0"] {
@@ -13,9 +15,17 @@
   }
 }
 
-/* Transición suave para todas las transformaciones */
-.admin-sidebar {
-  transition: transform 0.3s ease-in-out;
+/* Nuevo estilo para el botón de flecha */
+.sidebar-toggle-btn {
+  border-radius: 0 50% 50% 0 !important; /* Forma de semicírculo */
+  padding-left: 0.5rem; /* Ajuste para centrar icono */
+  left: 0 !important; /* Posición exacta en borde izquierdo */
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Sombra suave */
+  border-left: none !important; /* Eliminar borde izquierdo */
+}
+
+.sidebar-toggle-btn i {
+  margin-left: 2px; /* Ajuste fino de posición del icono */
 }
 
 @keyframes fadeIn {

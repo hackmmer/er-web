@@ -67,39 +67,49 @@ export class AddEditModalComponent implements OnChanges {
     });
   }
 
+  
+
   ngOnChanges(): void {
-  if (this.data()) {
-      // Convertir ingredientes a array de IDs
-      const ingredientIds = this.data()?.ingredients.map(i => i._id);
+    if (this.data()) {
+      const productData = this.data()!;
       
-      this.productForm.patchValue({
-        ...this.data,
-        ingredients: ingredientIds
-      });
+      // 1. Manejar ingredientes de forma segura
+      const ingredientIds = productData.ingredients 
+        ? productData.ingredients.map(i => i?._id).filter(id => id !== undefined) as string[]
+        : [];
+
+      // 2. Manejar categoría de forma segura
+      const categoryId = productData.category?._id || '';
+
+      // Crear objeto con valores seguros
+      const formValues = {
+        name: productData.name || '',
+        price: productData.price || 0,
+        description: productData.description || '',
+        imageUrl: productData.imageUrl || '',
+        isAvailable: productData.isAvailable ?? true,
+        stock: productData.stock || 0,
+        category: categoryId,
+        ingredients: ingredientIds,
+        isVegetarian: productData.isVegetarian ?? false,
+        isVegan: productData.isVegan ?? false,
+        preparationTime: productData.preparationTime || 0
+      };
+
+      this.productForm.patchValue(formValues);
+
     } else if (this.isOpen()) {
       this.productForm.reset({
         isAvailable: true,
         ingredients: [],
+        stock: 0,
+        price: 0,
+        category: '',
+        isVegetarian: false,
+        isVegan: false,
+        preparationTime: 0
       });
     }
-  }
-
-  getCategoryName(id: string): string {
-    return this.categories.find((c) => c._id === id)?.name || '';
-  }
-
-  onCategorySelect(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const categoryId = select.value;
-
-    if (categoryId) {
-      this.productForm.get('category')?.setValue(categoryId);
-      select.value = '';
-    }
-  }
-
-  removeCategory(): void {
-    this.productForm.get('category')?.setValue('');
   }
 
   getIngredientName(id: string): string {
@@ -142,7 +152,21 @@ export class AddEditModalComponent implements OnChanges {
   onSubmit(): void {
     this.isLoading=true
     if (this.productForm.valid) {
-      this.api.products
+      if(this.data()){
+        this.api.products
+        .update_product(this.data()!._id,this.productForm.value as IProductCreate)
+        .subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.handleClose();
+          },
+          error: (e) => {
+            this.isLoading = false;
+            console.log(e);
+          },
+        });
+      }else{
+        this.api.products
         .create_product(this.productForm.value as IProductCreate)
         .subscribe({
           next: () => {
@@ -154,6 +178,8 @@ export class AddEditModalComponent implements OnChanges {
             console.log(e);
           },
         });
+      }
+      
     }
   }
 

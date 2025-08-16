@@ -5,6 +5,7 @@ export const locale = {
     home:{
       'title':'Bocatas que encienden tus sentidos',
       'details':"En Er'Caliente no solo servimos bocatas, creamos experiencias que te harán sudar. Ingredientes frescos, combinaciones explosivas y un toque de picante que nunca olvidarás.",
+      'orders_user':'Personaliza cada detalle de tu bocata y comparte tu creación con el mundo. Las mejores creaciones entran en nuestro "Salón de la Fama Picante".',
     },
     menu:{
       'title':'Nuestro Menú',
@@ -30,6 +31,7 @@ export const locale = {
       'signIn':'Iniciar sesión',
       'signUp':'Crear cuenta',
       'admin':'Administrador',
+      'create':'Comenzar a Crear',
     },
     login: {
       'enter': 'Entrar',
