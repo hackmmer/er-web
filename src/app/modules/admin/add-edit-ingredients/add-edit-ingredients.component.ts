@@ -47,7 +47,6 @@ export class AddEditIngredientsComponent implements OnChanges {
 
 ngOnChanges(): void {
   if (this.data()) {
-    console.log(this.data())
     const ingredientData = this.data()!;
     
     // Asignar selectedAlergens primero

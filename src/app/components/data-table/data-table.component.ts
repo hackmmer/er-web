@@ -45,10 +45,6 @@ export class DataTableComponent {
     );
   }
 
-  isArray(v:any){
-    return Array.isArray(v)
-  }
-
   edit(id:string, data:any){
     this.emit_edit.emit({id:id, data:data, title:this.title})
   }
