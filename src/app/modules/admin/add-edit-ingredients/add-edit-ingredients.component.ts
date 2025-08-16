@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, input, OnChanges, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AlergenTypes, ICategory, IIngredient, UnitTypes } from '@models/product';
+import { AlergenTypes, ICategory, IIngredient, IIngredientCreate, UnitTypes } from '@models/product';
 import { ApiService } from '@services/api/api.service';
 
 @Component({
@@ -47,6 +47,7 @@ export class AddEditIngredientsComponent implements OnChanges {
 
 ngOnChanges(): void {
   if (this.data()) {
+    console.log(this.data())
     const ingredientData = this.data()!;
     
     // Asignar selectedAlergens primero
@@ -112,7 +113,7 @@ ngOnChanges(): void {
     this.isLoading=true
     if (this.ingredientForm.valid) {
       if(this.data()){
-        this.api.ingredients.update(this.data()!._id, this.ingredientForm.value).subscribe({
+        this.api.ingredients.update_ingredient(this.data()!._id, this.ingredientForm.value).subscribe({
           next: () => {
             this.isLoading = false;
             this.handleClose();
@@ -123,7 +124,7 @@ ngOnChanges(): void {
           },
         });
       }else{
-        this.api.ingredients.create({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredient).subscribe(
+        this.api.ingredients.create_ingredient({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredientCreate).subscribe(
           {
             next: () => {
             this.isLoading = false;
