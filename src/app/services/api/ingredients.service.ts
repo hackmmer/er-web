@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BaseApi, CRUD } from "./base-api.class";
-import { IIngredient } from "@models/product";
+import { IIngredient, IIngredientCreate } from "@models/product";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
@@ -12,8 +12,8 @@ export class IngredientsService extends BaseApi implements CRUD<IIngredient>{
         super(http, 'ingredients')
     }
 
-    create(data: IIngredient): Observable<IIngredient | any> {
-        return this.post<IIngredient>({ 
+    create_ingredient(data: IIngredientCreate): Observable<IIngredientCreate | any> {
+        return this.post<IIngredientCreate>({ 
             body: data
         });
     }
@@ -30,8 +30,8 @@ export class IngredientsService extends BaseApi implements CRUD<IIngredient>{
         return this.delete<IIngredient>({endpoint:id});
     }
 
-    update(id: string, data: IIngredient): Observable<IIngredient | any> {
-        return this.patch<IIngredient>({
+    update_ingredient(id?: string, data?: IIngredientCreate): Observable<IIngredientCreate | any> {
+        return this.patch<IIngredientCreate>({
             endpoint:id,
             body:data
         })

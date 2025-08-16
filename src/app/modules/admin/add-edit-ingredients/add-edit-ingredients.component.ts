@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, input, OnChanges, output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AlergenTypes, ICategory, IIngredient, UnitTypes } from '@models/product';
+import { AlergenTypes, ICategory, IIngredient, IIngredientCreate, UnitTypes } from '@models/product';
 import { ApiService } from '@services/api/api.service';
 
 @Component({
@@ -18,7 +18,10 @@ export class AddEditIngredientsComponent implements OnChanges {
 
   ingredientForm: FormGroup;
   selectedAlergens: AlergenTypes[] = [];
-  alergenTypes = Object.values(AlergenTypes).filter(v => typeof v === 'string') as string[];
+  alergenTypes = Object.keys(AlergenTypes).filter(key => isNaN(Number(key))).map(key => ({
+    name: key,
+    value: AlergenTypes[key as keyof typeof AlergenTypes]
+  }));
   unitTypes = Object.values(UnitTypes);
 
   categories:ICategory[] = []
@@ -30,7 +33,7 @@ export class AddEditIngredientsComponent implements OnChanges {
       description: [''],
       stock: [0, [Validators.required, Validators.min(0)]],
       category:['', Validators.required],
-      isAlergen: [false, Validators.required],
+      isAlergen: [[] as AlergenTypes[], Validators.required],
       isVegetarian: [false, Validators.required],
       isVegan: [false, Validators.required],
       unit: [UnitTypes.g, Validators.required],
@@ -42,45 +45,53 @@ export class AddEditIngredientsComponent implements OnChanges {
     })
   }
 
-  ngOnChanges(): void {
-    if (this.data()) {
-      this.ingredientForm.patchValue(this.data);
-      // this.selectedAlergens = [...this.data()?.alergenTypes];
-    } else if (this.isOpen()) {
-      this.ingredientForm.reset({
-        unit: UnitTypes.g,
-        isAlergen: false,
-        isVegetarian: false,
-        isVegan: false
-      });
-      this.selectedAlergens = [];
-    }
-  }
-
-  getCategoryName(id: string): string {
-    return this.categories.find(c => c._id === id)?.name || '';
-  }
-
-  onCategorySelect(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const categoryId = select.value;
+ngOnChanges(): void {
+  if (this.data()) {
+    const ingredientData = this.data()!;
     
-    if (categoryId) {
-      this.ingredientForm.get('category')?.setValue(categoryId);
-      select.value = '';
-    }
-  }
+    // Asignar selectedAlergens primero
+    this.selectedAlergens = [...ingredientData.alergenTypes];
+    
+    // Preparar valores para el formulario
+    const formValues = {
+      name: ingredientData.name,
+      price: ingredientData.price,
+      description: ingredientData.description,
+      stock: ingredientData.stock,
+      category: ingredientData.category._id, // Solo el ID
+      isAlergen: ingredientData.isAlergen,
+      isVegetarian: ingredientData.isVegetarian,
+      isVegan: ingredientData.isVegan,
+      unit: ingredientData.unit,
+      alergenTypes: ingredientData.alergenTypes
+    };
 
-  removeCategory(): void {
-    this.ingredientForm.get('category')?.setValue('');
+    this.ingredientForm.patchValue(formValues);
+    
+  } else if (this.isOpen()) {
+    // Reset completo con valores iniciales
+    this.ingredientForm.reset({
+      name: '',
+      price: 0,
+      description: '',
+      stock: 0,
+      category: '',
+      isAlergen: false,
+      isVegetarian: false,
+      isVegan: false,
+      unit: UnitTypes.g,
+      alergenTypes: []
+    });
+    this.selectedAlergens = [];
   }
+}
 
    onAlergenChange(event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     const value = checkbox.value;
     
-    // Convertimos el string a AlergenTypes usando aserción de tipo
-    const alergenValue = value as unknown as AlergenTypes;
+    // Convertir el string a valor numérico del enum
+    const alergenValue = Number(value) as AlergenTypes;
     
     if (checkbox.checked) {
       if (!this.selectedAlergens.includes(alergenValue)) {
@@ -93,15 +104,26 @@ export class AddEditIngredientsComponent implements OnChanges {
     this.ingredientForm.get('alergenTypes')?.setValue(this.selectedAlergens);
   }
 
-  isAlergenSelected(alergenString: string): boolean {
-    const alergenValue = alergenString as unknown as AlergenTypes;
+  isAlergenSelected(alergenValue: AlergenTypes): boolean {
     return this.selectedAlergens.includes(alergenValue);
   }
 
   onSubmit(): void {
     this.isLoading=true
     if (this.ingredientForm.valid) {
-      this.api.ingredients.create({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredient).subscribe(
+      if(this.data()){
+        this.api.ingredients.update_ingredient(this.data()!._id, this.ingredientForm.value).subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.handleClose();
+          },
+          error: (e) => {
+            this.isLoading = false;
+            console.log(e);
+          },
+        });
+      }else{
+        this.api.ingredients.create_ingredient({...this.ingredientForm.value, alergenTypes:this.selectedAlergens} as IIngredientCreate).subscribe(
           {
             next: () => {
             this.isLoading = false;
@@ -113,6 +135,8 @@ export class AddEditIngredientsComponent implements OnChanges {
           }
         }
       )
+      }
+      
     }
   }
 

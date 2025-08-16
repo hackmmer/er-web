@@ -1,126 +1,176 @@
-@if (user$ | async; as user) {
-<div class="max-w-5xl mx-auto mt-10 p-6 bg-base-300 rounded-xl shadow-lg space-y-7 border border-base-100 hover:shadow-xl transition-shadow">
-  <!-- Header -->
+@if (user(); as user) {
+  <form
+    [formGroup]="form"
+    class="max-w-5xl mx-auto mt-10 p-6 bg-base-300 rounded-xl shadow-lg space-y-7 border border-base-100 hover:shadow-xl transition-shadow"
+  >
+    <!-- Header -->
     <!-- Avatar -->
-  <div class="flex items-center gap-6">
-    <div class="avatar">
-      <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-        <img [alt]="user.firstName" [src]="user | profile" />
+    <div class="flex items-center gap-6">
+      <div class="avatar">
+        <div
+          class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+        >
+          <img [alt]="user.firstName" [src]="user | profile" />
+        </div>
       </div>
-    </div>
 
-    <!-- User Info -->
-    <div>
-      <h2 class="text-3xl font-bold text-base-content">{{ user.firstName }}</h2>
-      <p class="text-sm text-base-content/70">{{ user.email }}</p>
+      <!-- User Info -->
+      <div>
+        <h2 class="text-3xl font-bold text-base-content">{{ user.firstName }}</h2>
+        <p class="text-sm text-base-content/70">{{ user.email }}</p>
 
-      <div class="mt-2">
-        <div class="flex items-center">
-          @if (phoneState.isEditing) {
-            <input
-              type="tel"
-              [(ngModel)]="phoneState.newPhoneNumber"
-              class="bg-base-200 input input-bordered input-sm w-full max-w-xs mr-2"
-              [class.outline]="phoneState.isEditing"
-              [disabled]="phoneState.isLoading"
-            />
-          } @else {
-            @if (user.phone) {
-              <span class="text-sm text-base-content/70 mr-2">{{ user.phone }}</span>
+        <div formGroupName="personalInfo" class="mt-2">
+          <div class="flex items-center">
+            @if (phoneState.isEditing) {
+              <input
+                type="tel"
+                formControlName="phone"
+                class="bg-base-200 input input-bordered input-sm w-full max-w-xs mr-2"
+                [class.outline]="phoneState.isEditing"
+                [disabled]="phoneState.isLoading"
+              />
             } @else {
-              <span class="text-sm italic text-warning mr-2">No hay número telefónico</span>
-            }
-          }
-
-          <button
-            class="btn btn-xs btn-outline btn-warning"
-            (click)="toggleEditingPhone()"
-            [disabled]="phoneState.isLoading"
-          >
-            @if (phoneState.isLoading) {
-              <span class="loading loading-spinner loading-xs"></span>
-            } @else {
-              @if (phoneState.isEditing) {
-                Guardar
-              } @else {
-                {{ user.phone ? 'Editar' : 'Añadir número' }}
+              @if (user.phone) {
+                <span class="text-sm text-base-content/70 mr-2">{{
+                  user.phone
+                }}</span>
+              }
+              @else {
+                <span class="text-sm italic text-warning mr-2"
+                  >No hay número telefónico</span
+                >
               }
             }
+
+            <button
+              class="btn btn-xs btn-outline btn-warning"
+              (click)="toggleEditingPhone()"
+              [disabled]="phoneState.isLoading"
+            >
+              @if (phoneState.isLoading) {
+                <span class="loading loading-spinner loading-xs"></span>
+              }
+              @else {
+                @if (phoneState.isEditing) {
+                  Guardar
+                }
+                @else {
+                  {{ user.phone ? "Editar" : "Añadir número" }}
+                }
+              }
+            </button>
+          </div>
+
+          <!-- Info/Error message -->
+          @if (phoneState.error) {
+            <div class="text-error text-xs mt-1">
+              {{ phoneState.error }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Info -->
+    <div formGroupName="personalInfo" class="grid md:grid-cols-3 gap-6">
+      <div>
+        <label class="label font-bold text-base-content">Nombre(s)</label>
+        <input
+          formControlName="firstName"
+          type="text"
+          class="input input-bordered w-full"
+          [value]="user.firstName"
+        />
+      </div>
+      <div>
+        <label class="label font-bold text-base-content">Apellidos</label>
+        <input
+          formControlName="lastName"
+          type="text"
+          class="input input-bordered w-full"
+          [value]="user.lastName"
+        />
+      </div>
+      @if(form.get('personalInfo')?.dirty || form.get('personalInfo')?.touched){
+        <div class="flex items-end justify-end">
+          <button
+            class="btn right-0 w-32"
+            (click)="submit('personalInfo')"
+            type="button"
+          >
+            Update
           </button>
         </div>
+      }
+    </div>
 
-        <!-- Info/Error message -->
-        @if (phoneState.error) {
-          <div class="text-error text-xs mt-1">
-            {{ phoneState.error }}
-          </div>
+    <!-- Preferencias -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <label class="label font-bold text-secondary m-0"
+          >Preferencias Dietéticas</label
+        >
+        <button class="btn btn-sm btn-outline btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 mr-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M12 5v14m7-7H5" />
+          </svg>
+          Editar
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-2 font-medium">
+        @if (user.dietaryPreferences.length > 0) {
+          @for (preference of user.dietaryPreferences; track $index) {
+            <div class="badge" [ngClass]="$index % 2 === 0 ? 'badge-accent' : 'badge-secondary'">
+              {{ preference }}
+            </div>
+          }
+        } @else {
+          <p class="text-sm text-base-content/70">No hay preferencias dietéticas</p>
         }
       </div>
     </div>
-  </div>
 
-  <!-- Personal Info -->
-  <div class="grid md:grid-cols-2 gap-6">
+    <!-- Points and Achievements -->
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="stat bg-base-200 text-base-content rounded-lg">
+        <div class="stat-title">Puntos de Lealtad</div>
+        <div class="stat-value text-error">{{ user.loyaltyPoints }}</div>
+      </div>
+      <div class="stat bg-base-200 text-base-content rounded-lg">
+        <div class="stat-title">Logros Completados</div>
+        <div class="stat-value text-secondary">
+          {{ user.achievements.size > 0 ? user.achievements.size : 0 }}
+        </div>
+      </div>
+      <div class="stat bg-base-200 text-base-content rounded-lg">
+        <div class="stat-title">Referidos</div>
+        <div class="stat-value text-error">{{ user.referrals.length }}</div>
+      </div>
+    </div>
+
+    <!-- Notificaciones -->
     <div>
-      <label class="label font-bold text-base-content">Nombre(s)</label>
-      <input type="text" class="input input-bordered w-full" [value]="user.firstName" disabled />
-    </div>
-    <div>
-      <label class="label font-bold text-base-content">Apellidos</label>
-      <input type="text" class="input input-bordered w-full" [value]="user.lastName" disabled />
-    </div>
-  </div>
-
-  <!-- Preferencias -->
-  <div>
-    <div class="flex items-center justify-between mb-2">
-      <label class="label font-bold text-secondary m-0">Preferencias Dietéticas</label>
-      <button class="btn btn-sm btn-outline btn-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14m7-7H5" /></svg>
-        Editar
-      </button>
-    </div>
-
-    <div class="flex flex-wrap gap-2 font-medium">
-      @if (user.dietaryPreferences.length > 0) {
-        @for (preference of user.dietaryPreferences; track $index) {
-          <div class="badge" [ngClass]="$index % 2 === 0 ? 'badge-accent' : 'badge-secondary'">
-            {{ preference }}
-          </div>
-        }
-      } @else {
-        <p class="text-sm text-base-content/70">No hay preferencias dietéticas</p>
-      }
-    </div>
-  </div>
-
-  <!-- Points and Achievements -->
-  <div class="grid md:grid-cols-3 gap-4">
-    <div class="stat bg-base-200 text-base-content rounded-lg">
-      <div class="stat-title">Puntos de Lealtad</div>
-      <div class="stat-value text-error">{{ user.loyaltyPoints }}</div>
-    </div>
-    <div class="stat bg-base-200 text-base-content rounded-lg">
-      <div class="stat-title">Logros Completados</div>
-      <div class="stat-value text-secondary">{{ user.achievements.size > 0 ? user.achievements.size : 0 }}</div>
-    </div>
-        <div class="stat bg-base-200 text-base-content rounded-lg">
-      <div class="stat-title">Referidos</div>
-      <div class="stat-value text-error">{{ user.referrals.length }}</div>
-    </div>
-  </div>
-
-  <!-- Notificaciones -->
-  <div>
-    <h3 class="font-bold mb-2 text-base-content">Canales de Notificación</h3>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      @for (channel of [user.notificationChannels.email, user.notificationChannels.sms, user.notificationChannels.whatsapp, user.notificationChannels.push]; track $index) {
-        <label class="flex items-center gap-2">
-          <input
-            type="checkbox"
-            class="checkbox"
-            [checked]="channel"
-            [ngClass]="channel ? 'checkbox-primary' : ''"
+      <h3 class="font-bold mb-2 text-base-content">Canales de Notificación</h3>
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4"
+        formGroupName="notificationChannels"
+      >
+        @for (channel of ['email', 'sms', 'whatsapp', 'push']; track $index) {
+          <label class="flex items-center gap-2">
+            @let isChannelActive = getNotificationChannel(channel);
+            <input
+              [formControlName]="channel"
+              type="checkbox"
+              class="checkbox"
+              [checked]="isChannelActive"
+              [ngClass]="isChannelActive ? 'checkbox-primary' : ''"
             />
             @switch ($index) {
               @case (0) { Email }
@@ -128,26 +178,33 @@
               @case (2) { WhatsApp }
               @case (3) { Push }
             }
-        </label>
+          </label>
         }
-    </div>
-  </div>
-
-  <!-- 2FA -->
-  <div class="mt-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <h3 class="font-bold text-base-content">Autenticación en dos pasos</h3>
-        <p class="text-sm text-base-content">Estado:
-          <span class="font-semibold" [ngClass]="user.is2FAEnabled ? 'text-success' : 'text-error'">
-            {{ user.is2FAEnabled ? 'Activado' : 'Desactivado' }}
-          </span>
-        </p>
       </div>
-      <button class="btn" [ngClass]="user.is2FAEnabled ? 'btn-error' : 'btn-success'">
-        {{ user.is2FAEnabled ? 'Desactivar 2FA' : 'Activar 2FA' }}
-      </button>
     </div>
-  </div>
-</div>
+
+    <!-- 2FA -->
+    <div class="mt-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base-content">Autenticación en dos pasos</h3>
+          <p class="text-sm text-base-content">
+            Estado:
+            <span
+              class="font-semibold"
+              [ngClass]="user.is2FAEnabled ? 'text-success' : 'text-error'"
+            >
+              {{ user.is2FAEnabled ? "Activado" : "Desactivado" }}
+            </span>
+          </p>
+        </div>
+        <button
+          class="btn"
+          [ngClass]="user.is2FAEnabled ? 'btn-error' : 'btn-success'"
+        >
+          {{ user.is2FAEnabled ? "Desactivar 2FA" : "Activar 2FA" }}
+        </button>
+      </div>
+    </div>
+  </form>
 }

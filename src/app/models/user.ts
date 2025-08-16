@@ -6,12 +6,12 @@ export enum EnumRoleUser {
 }
 
 export enum EnumLangs {
-  ES = "es",
-  EN = "en",
-  FR = "fr",
-  IT = "it",
-  PT = "pt",
-  DE = "de",
+  ES = 'es',
+  EN = 'en',
+  FR = 'fr',
+  IT = 'it',
+  PT = 'pt',
+  DE = 'de',
 }
 
 export interface IUser {
@@ -37,14 +37,21 @@ export interface IUser {
   loyaltyPoints: number;
   achievements: Map<string, number>; // Ej: { "ordersCompleted": 5 }
   notificationChannels: {
-    email: { type: Boolean; default: true };
-    sms: { type: Boolean; default: false };
-    whatsapp: { type: Boolean; default: false };
-    push: { type: Boolean; default: true };
+    email: boolean;
+    sms: boolean;
+    whatsapp: boolean;
+    push: boolean;
   };
 
   // 2FA
   twoFASecret?: string;
   is2FAEnabled: boolean;
   referrals: IUser[];
+}
+
+export enum notificationChannelsEnum {
+  email = 'email',
+  sms = 'sms',
+  whatsapp = 'whatsapp',
+  push = 'push',
 }

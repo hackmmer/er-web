@@ -89,13 +89,14 @@
         <div *ngIf="ingredientForm.get('isAlergen')?.value" class="mt-4">
           <h4 class="font-bold text-lg mb-2">Tipos de Alérgenos</h4>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-            <label *ngFor="let alergen of alergenTypes" class="label cursor-pointer">
-              <span class="label-text">{{ alergen }}</span>
+          <!-- Usar alergenValue directamente -->
+            <label *ngFor="let item of alergenTypes" class="label cursor-pointer">
+              <span class="label-text">{{ item.name }}</span>
               <input 
                 type="checkbox" 
-                [value]="alergen"
+                [value]="item.value"
                 (change)="onAlergenChange($event)"
-                [checked]="isAlergenSelected(alergen)"
+                [checked]="isAlergenSelected(item.value)"
                 class="checkbox checkbox-primary"
               >
             </label>
@@ -108,40 +109,23 @@
             </label>
             <select
               class="select select-bordered w-full"
-              (change)="onCategorySelect($event)"
-            >
-              <option value="" disabled selected>Selecciona la Categoria</option>
-              <option *ngFor="let category of categories" [value]="category._id">
+              formControlName="category">
+              <option [value]="null" disabled>Selecciona la Categoría</option>
+              <option *ngFor="let category of categories" 
+                      [value]="category._id"
+                      [selected]="category._id === ingredientForm.get('category')?.value">
                 {{ category.name }}
               </option>
             </select>
 
-            <!-- Lista de ingredientes seleccionados -->
-            <div class="mt-4">
-              <div class="overflow-x-auto">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="ingredientForm.get('category')?.value">
-                    <tr>
-                      <td>{{ getCategoryName(ingredientForm.get('category')?.value) }}</td>
-                      <td>
-                        <button 
-                          type="button" 
-                          (click)="removeCategory()" 
-                          class="btn btn-sm btn-error"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="mt-2" *ngIf="ingredientForm.get('category')?.value">
+              <button
+                type="button"
+                (click)="ingredientForm.get('category')?.setValue('')"
+                class="btn btn-sm btn-error"
+              >
+                Deseleccionar categoría
+              </button>
             </div>
           </div>
 
