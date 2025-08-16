@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
-import { IUser } from '@models/user';
+import { IUser, UserUpdates } from '@models/user';
 import { AuthService } from './auth.service';
 import { Observable, tap } from 'rxjs';
 
@@ -10,7 +10,6 @@ import { Observable, tap } from 'rxjs';
 })
 export class UsersService extends BaseApi {
   public currentUser?: IUser;
-  headers?: HttpHeaders;
 
   constructor(http: HttpClient, private authService: AuthService) {
     super(http, 'users');
@@ -24,13 +23,34 @@ export class UsersService extends BaseApi {
     );
   }
 
-
   /* PROFILE UPDATES */
   updateUserPhone(phone: string): Observable<IUser> {
     return this.patch<IUser>({
-      headers: this.headers,
-      body: { phone: phone }
+      body: { phone: phone },
     });
   }
 
+  updateProfileImage(data: UserUpdates.profileImage): Observable<IUser> {
+    return this.patch<IUser>({
+      endpoint: 'image',
+      body: data,
+    });
+  }
+
+  deleteProfileImage(data: UserUpdates.profileImage): Observable<IUser> {
+    return this.delete<IUser>({ endpoint: 'image' });
+  }
+
+  updatePersonalInfo(data: UserUpdates.personalInfo): Observable<IUser> {
+    return this.patch<IUser>({
+      body: data,
+    });
+  }
+
+  updateNotificationsChannels(data: UserUpdates.notificationChannels): Observable<IUser> {
+    return this.patch<IUser>({
+      endpoint: 'preferences/notification-channel',
+      body: data,
+    });
+  }
 }

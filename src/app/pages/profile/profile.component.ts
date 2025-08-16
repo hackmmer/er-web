@@ -78,7 +78,31 @@ export class ProfileComponent implements OnInit {
   }
 
   submit(section: string) {
-    console.log(this.form.getRawValue())
+    const data = this.form.get(section)?.getRawValue();
+    console.log(data);
+    switch (section) {
+      case 'profileImage':
+        this.usersService.updateProfileImage(data).subscribe((e) => {
+          console.log(e);
+          this.user.set(e);
+        });
+        return;
+      case 'personalInfo':
+        this.usersService.updatePersonalInfo(data).subscribe((e) => {
+          console.log(e);
+          this.user.set(e);
+        });
+        return;
+      case 'dietaryPreferences':
+        console.log('Not Implemented Yet');
+        return;
+      case 'notificationChannels':
+        this.usersService.updateNotificationsChannels(data).subscribe((e) => {
+          console.log(e);
+          this.user.set(e);
+        });
+        return;
+    }
   }
 
   sendToHome(): void {
@@ -137,8 +161,7 @@ export class ProfileComponent implements OnInit {
 
   toggleNotificationChannel(channel: string) {
     const notifications = this.user()?.notificationChannels;
-    if (!notifications)
-      return
+    if (!notifications) return;
     switch (channel) {
       case notificationChannelsEnum.email:
         notifications.email = !notifications.email;
@@ -153,12 +176,9 @@ export class ProfileComponent implements OnInit {
         notifications.push = !notifications.push;
         return;
     }
-
   }
 
-  updateNotiChannel(channel: string) {
-
-  }
+  updateNotiChannel(channel: string) {}
 
   /* END HANDLE NOTIFICATION CHANNELS */
 
