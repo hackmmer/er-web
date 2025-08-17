@@ -32,6 +32,7 @@ export const locale = {
       'signUp':'Crear cuenta',
       'admin':'Administrador',
       'create':'Comenzar a Crear',
+      "search": "Buscar",
     },
     login: {
       'enter': 'Entrar',
@@ -91,6 +92,11 @@ export const locale = {
       'add_product':'Añadir Producto',
       'add_ingredients':'Añadir Ingredientes',
       'add_category': 'Añadir Categoria',
+    },
+    search: {
+      "placeholder": "Buscar productos...",
+      "results": "Resultados de búsqueda",
+      "no_results":"No hay resultados para la búsqueda de"
     },
     others:{
       'hot':'Caliente',

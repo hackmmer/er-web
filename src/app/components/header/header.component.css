@@ -1,7 +1,5 @@
-:host
-{
-    --red-spicy: #FF3B30;
-    --yellow-mustard: #FFD60A;
+:host {
+    --transition-duration: 0.3s;
 }
 
 .logo {
@@ -9,36 +7,46 @@
     align-items: center;
     justify-items: center;
     justify-content: center;
+    transition: all var(--transition-duration) ease;
 }
 
 .logo img {
     width: 40px;
     height: 40px;
     padding: 2px;
+    transition: all var(--transition-duration) ease;
 }
 
 .logo h1 {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--red-spicy);
+    color: var(--color-primary);
     margin-left: 5px;
+    transition: all var(--transition-duration) ease;
 }
 
 .logo h1 .word {
-    color: var(--yellow-mustard)
+    color: var(--color-secondary);
 }
 
 .right-container{
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all var(--transition-duration) ease;
 }
 
 .p-0{
     padding: 0 !important;
 }
 
-/* Keep existing styles, add: */
+/* Search input animations */
+input[type="text"] {
+    transition: 
+        width var(--transition-duration) ease-in-out,
+        opacity var(--transition-duration) ease-in-out,
+        padding var(--transition-duration) ease-in-out;
+}
 
 /* Mobile logo adjustments */
 .logo h1 {
@@ -49,4 +57,14 @@
     .logo h1 {
         display: block;
     }
+}
+
+/* Mobile search modal animation */
+.fixed {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

@@ -6,6 +6,7 @@ import { AdminComponent } from './modules/admin/admin.component';
 import { AuthGuard } from '@services/auth.guard.service';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CustomProductComponent } from './pages/custom-product/custom-product.component';
+import { SearchComponent } from '@components/search/search.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,10 @@ export const routes: Routes = [
         path:'custom',
         component:CustomProductComponent,
         canActivate:[AuthGuard]
+    },
+    { 
+        path: 'search', 
+        component: SearchComponent 
     },
     {
         path:'**',
