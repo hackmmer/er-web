@@ -4,7 +4,7 @@ export const environment = {
     title: "Er'Caliente [Stagin]",
     desc: "♨️ ¿Bocatas CALIENTES que desafían lo aburrido? Er'Caliente: Bocatería urbana en Sevilla con sabor potente, nombres prohibidos y actitud sin filtro. ¡La Zona Caliente te espera! 🔥 Pide ya.",
     url: 'https://er-web-p46u.onrender.com/',
-    image: 'assets/img/reseña2.jpg',
+    image: 'https://er-web-p46u.onrender.com/assets/img/reseña2.jpg',
   },
   api: {
     host: 'https://ercaliente.onrender.com',
