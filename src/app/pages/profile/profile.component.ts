@@ -6,11 +6,10 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsersService } from '@services/api/users.service';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IUser, notificationChannelsEnum } from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
 
@@ -67,7 +66,28 @@ export class ProfileComponent implements OnInit {
   }
 
   submit(section: string) {
-    console.log(this.form.getRawValue())
+    const data = this.form.get(section)?.getRawValue();
+    console.log(data);
+    switch (section) {
+      case 'profileImage':
+        this.usersService
+          .updateProfileImage(data)
+          .subscribe((e) => this._afterUpdate(e, section));
+        return;
+      case 'personalInfo':
+        this.usersService
+          .updatePersonalInfo(data)
+          .subscribe((e) => this._afterUpdate(e, section));
+        return;
+      case 'dietaryPreferences':
+        console.log('Not Implemented Yet');
+        return;
+      case 'notificationChannels':
+        this.usersService
+          .updateNotificationsChannels(data)
+          .subscribe((e) => this._afterUpdate(e, section));
+        return;
+    }
   }
 
   sendToHome(): void {
@@ -93,20 +113,18 @@ export class ProfileComponent implements OnInit {
     const phoneControl = this.form.get('personalInfo.phone');
     this.handleControl(phoneControl, false);
 
-    this.usersService
-      .updateUserPhone(phoneControl?.value)
-      .subscribe({
-        next: (updatedUser) => {
-          this.user.set(updatedUser);
-          this.phoneState.reset();
-          this.handleControl(phoneControl, true);
-        },
-        error: (err) => {
-          this.handleControl(phoneControl, true);
-          this.phoneState.setError(err.error.message[0]);
-          // console.error('Update phone error:', err);                 // Just for debug
-        }
-      });
+    this.usersService.updateUserPhone(phoneControl?.value).subscribe({
+      next: (updatedUser) => {
+        this.user.set(updatedUser);
+        this.phoneState.reset();
+        this.handleControl(phoneControl, true);
+      },
+      error: (err) => {
+        this.handleControl(phoneControl, true);
+        this.phoneState.setError(err.error.message[0]);
+        // console.error('Update phone error:', err);                 // Just for debug
+      },
+    });
   }
   /* END HANDLE PHONE NUMBER */
 
@@ -130,8 +148,7 @@ export class ProfileComponent implements OnInit {
 
   toggleNotificationChannel(channel: string) {
     const notifications = this.user()?.notificationChannels;
-    if (!notifications)
-      return
+    if (!notifications) return;
     switch (channel) {
       case notificationChannelsEnum.email:
         notifications.email = !notifications.email;
@@ -146,12 +163,9 @@ export class ProfileComponent implements OnInit {
         notifications.push = !notifications.push;
         return;
     }
-
   }
 
-  updateNotiChannel(channel: string) {
-
-  }
+  updateNotiChannel(channel: string) {}
 
   /* END HANDLE NOTIFICATION CHANNELS */
 
@@ -166,10 +180,13 @@ export class ProfileComponent implements OnInit {
       personalInfo: this.fb.group({
         firstName: this.fb.control(user?.firstName || '', []),
         lastName: this.fb.control(user?.lastName || '', []),
-        phone: this.fb.control({
-          value: user?.phone || '',
-          disabled: !this.phoneState.isEditing
-        }, [])
+        phone: this.fb.control(
+          {
+            value: user?.phone || '',
+            disabled: !this.phoneState.isEditing,
+          },
+          []
+        ),
       }),
       dietaryPreferences: this.fb.array([], []),
       notificationChannels: this.fb.group({
@@ -182,6 +199,13 @@ export class ProfileComponent implements OnInit {
         push: this.fb.control(user?.notificationChannels.push || false, []),
       }),
     });
+  }
+
+  private _afterUpdate(r: IUser, section: string) {
+    console.log(r);
+    this.user.set(r);
+    this.form.get(section)?.markAsUntouched();
+    this.form.get(section)?.markAsPristine();
   }
 
   private handleControl(control: AbstractControl | null, enable: boolean) {

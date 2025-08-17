@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BaseApi, CRUD } from './base-api.class';
 import { HttpClient } from '@angular/common/http';
-import { ICategory} from '@models/product';
+import { ICategory } from '@models/product';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CategoryService
-  extends BaseApi
-  implements CRUD<ICategory>
-{
-  
+export class CategoryService extends BaseApi implements CRUD<ICategory> {
   constructor(http: HttpClient) {
     super(http, 'category');
   }
@@ -25,19 +21,19 @@ export class CategoryService
   }
 
   create(data: ICategory) {
-    return this.post<ICategory>({ 
-      body: data
+    return this.post<ICategory>({
+      body: data,
     });
   }
 
   remove(id?: string): Observable<ICategory | any> {
-    return this.delete<ICategory>({endpoint:id});
+    return this.delete<ICategory>({ endpoint: id });
   }
 
   update(id?: string, data?: ICategory): Observable<ICategory | any> {
     return this.patch<ICategory>({
-      endpoint:id,
-      body:data
-    })
+      endpoint: id,
+      body: data,
+    });
   }
 }

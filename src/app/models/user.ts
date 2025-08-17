@@ -14,6 +14,13 @@ export enum EnumLangs {
   DE = 'de',
 }
 
+export interface IUserNotificationChannels {
+  email: boolean;
+  sms: boolean;
+  whatsapp: boolean;
+  push: boolean;
+}
+
 export interface IUser {
   authProviders: {
     local?: {
@@ -36,17 +43,43 @@ export interface IUser {
   dietaryPreferences: string[]; // Ej: ["vegano", "sin gluten"]
   loyaltyPoints: number;
   achievements: Map<string, number>; // Ej: { "ordersCompleted": 5 }
-  notificationChannels: {
-    email: boolean;
-    sms: boolean;
-    whatsapp: boolean;
-    push: boolean;
-  };
+  notificationChannels: IUserNotificationChannels;
 
   // 2FA
   twoFASecret?: string;
   is2FAEnabled: boolean;
   referrals: IUser[];
+}
+
+export namespace UserUpdates {
+  export interface profileImage {
+    profileImage: string;
+  }
+
+  export interface personalInfo {
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+  }
+
+  export interface dietaryPreferences {
+    dietaryPreferences?: string[];
+  }
+
+  export interface languaje {
+    language?: string;
+  }
+
+  export interface notificationChannels {
+    email?: boolean;
+    sms?: boolean;
+    whatsapp?: boolean;
+    push?: boolean;
+  }
+
+  export interface twoFA {
+    token: string;
+  }
 }
 
 export enum notificationChannelsEnum {
