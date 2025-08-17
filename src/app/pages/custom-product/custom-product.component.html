@@ -1,0 +1,104 @@
+<!-- product-form.component.html -->
+<form [formGroup]="customForm" class="max-w-3xl mx-auto mt-8 p-6 bg-base-200 rounded-xl shadow-md space-y-6">
+  <!-- Product Name -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text font-bold text-base-content">Nombre del Producto</span>
+    </label>
+    <input 
+      type="text" 
+      formControlName="name" 
+      placeholder="Escribe el nombre del producto"
+      class="input input-bordered w-full"
+      [ngClass]="{'input-error': customForm.get('name')?.invalid && customForm.get('name')?.touched}"
+    >
+    @if (customForm.get('name')?.invalid && customForm.get('name')?.touched) {
+      <label class="label">
+        <span class="label-text-alt text-error">Este campo es requerido</span>
+      </label>
+    }
+  </div>
+
+  <!-- Ingredients Selector -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text font-bold text-base-content">Seleccionar Ingrediente</span>
+    </label>
+    <select 
+      (change)="onIngredientSelect($event)"
+      class="select select-bordered w-full"
+    >
+      <option value="" disabled selected>Selecciona un ingrediente</option>
+      @for (ingredient of ingredients; track ingredient._id) {
+        <option [value]="ingredient._id">{{ ingredient.name }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Selected Ingredients -->
+  <div class="mt-6">
+    <label class="label">
+      <span class="label-text font-bold text-base-content">Ingredientes Seleccionados</span>
+    </label>
+    
+    @if (customForm.get('ingredients')?.value?.length === 0) {
+      <div class="alert alert-info">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>No hay ingredientes seleccionados</span>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (ingredientId of customForm.get('ingredients')?.value; track $index; let i = $index) {
+          <div class="card bg-base-100 border border-base-300 rounded-lg">
+            <div class="card-body p-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="card-title text-lg font-medium">
+                    {{ getIngredientName(ingredientId) }}
+                  </h3>
+                  <p class="text-base-content/80">
+                    Precio: {{ getIngredientPrice(ingredientId) | currency }} 
+                    <span class="text-xs">(por {{ getIngredientUnit(ingredientId) | lowercase }})</span>
+                  </p>
+                </div>
+                <button 
+                  type="button" 
+                  (click)="removeIngredient(i)"
+                  class="btn btn-sm btn-circle btn-ghost text-error"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    
+    @if (customForm.get('ingredients')?.invalid && customForm.get('ingredients')?.touched) {
+      <label class="label">
+        <span class="label-text-alt text-error">Debe seleccionar al menos un ingrediente</span>
+      </label>
+    }
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex justify-end mt-8">
+    <button type="button" (click)="handleClose()" class="btn">Cancelar</button>
+          <button
+            type="button"
+            (click)="onSubmit()"
+            class="btn btn-primary"
+            [disabled]="customForm.invalid"
+          >
+          @if (isLoading) {
+              <span class="loading loading-spinner loading-xs"></span>
+            }
+            Guardar
+          </button>
+    </div>
+</form>

@@ -110,7 +110,7 @@
             <select
               class="select select-bordered w-full"
               formControlName="category">
-              <option [value]="null" disabled>Selecciona la Categoría</option>
+              <option value="" disabled selected>Selecciona Categorias</option>
               <option *ngFor="let category of categories" 
                       [value]="category._id"
                       [selected]="category._id === ingredientForm.get('category')?.value">

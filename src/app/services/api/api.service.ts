@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { ProductsService } from './products.service';
 import { IngredientsService } from './ingredients.service';
 import { CategoryService } from './category.service';
+import { CustomProductsService } from './custom-products.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class ApiService {
     public auth: AuthService,
     public products: ProductsService,
     public ingredients: IngredientsService,
-    public category: CategoryService
+    public category: CategoryService,
+    public custom:CustomProductsService
   ) {}
 }

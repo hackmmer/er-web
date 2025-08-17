@@ -5,6 +5,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AdminComponent } from './modules/admin/admin.component';
 import { AuthGuard } from '@services/auth.guard.service';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { CustomProductComponent } from './pages/custom-product/custom-product.component';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     {
         path:'admin',
         component:AdminComponent,
+        canActivate:[AuthGuard]
+    },
+    {
+        path:'custom',
+        component:CustomProductComponent,
         canActivate:[AuthGuard]
     },
     {

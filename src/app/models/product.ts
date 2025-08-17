@@ -126,3 +126,17 @@ export interface IProductCreate {
 
   preparationTime?: number;
 }
+
+export interface ICustomProductCreate{
+  _id?:string;
+  userId?:string;
+  name:string;
+  ingredients:string[];
+}
+
+export interface ICustomProduct{
+  _id?:string;
+  userId?:string;
+  name:string;
+  ingredients:IIngredient[];
+}

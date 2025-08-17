@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, LowerCasePipe, NgFor, NgIf } from '@angular/common';
 import {
   Component,
   inject,
@@ -26,7 +26,7 @@ import { Models } from 'appwrite';
 
 @Component({
   selector: 'app-add-edit-modal',
-  imports: [ReactiveFormsModule, NgFor, CurrencyPipe, NgIf],
+  imports: [ReactiveFormsModule, NgFor, CurrencyPipe, NgIf, LowerCasePipe],
   templateUrl: './add-edit-modal.component.html',
   styleUrl: './add-edit-modal.component.css',
 })
