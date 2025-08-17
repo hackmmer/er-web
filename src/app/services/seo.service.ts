@@ -6,6 +6,7 @@ interface OGData {
   desc: string;
   url: string;
   image: string;
+  domain?: string;
 }
 
 @Injectable({
@@ -19,28 +20,33 @@ export class SEOService {
     this.updateDescription(data.desc);
     this.updateOgUrl(data.url);
     this.updateOgImage(data.image);
+    if (data.domain) this.updateDomain(data.domain);
   }
 
   updateTitle(title: string) {
     this.title.setTitle(title);
-    this.meta.updateTag({ name: 'og:title', content: title });
+    this.meta.updateTag({ property: 'og:title', content: title });
     this.meta.updateTag({ name: 'twitter:title', content: title });
   }
 
   updateOgUrl(url: string) {
-    this.meta.updateTag({ name: 'og:url', content: url });
-    this.meta.updateTag({ name: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: url });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ name: 'twitter:url', content: url });
+  }
+
+  updateDomain(domain: string) {
+    this.meta.updateTag({ property: 'twitter:domain', content: domain });
   }
 
   updateDescription(desc: string) {
     this.meta.updateTag({ name: 'description', content: desc });
-    this.meta.updateTag({ name: 'og:description', content: desc });
+    this.meta.updateTag({ property: 'og:description', content: desc });
     this.meta.updateTag({ name: 'twitter:description', content: desc });
   }
 
   updateOgImage(image: string) {
-    this.meta.updateTag({ name: 'og:image', content: image });
+    this.meta.updateTag({ property: 'og:image', content: image });
     this.meta.updateTag({ name: 'twitter:image', content: image });
     this.meta.updateTag({
       name: 'twitter:card',
