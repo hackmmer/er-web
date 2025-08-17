@@ -1,7 +1,7 @@
 import { ApiService } from '@services/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { IProduct } from '@models/product';
+import { ICustomProduct, IProduct } from '@models/product';
 
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ApiModule } from '@services/api/api.module';
@@ -14,21 +14,19 @@ import { LoadingService } from '@services/loading.service';
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
 })
-export class MenuComponent implements OnInit {
-  products: IProduct[] = [];
+export class MenuComponent {
+  products: IProduct[] = []
+  custom_products!:ICustomProduct[]
 
-  constructor(private api: ApiService, private appwrite: AppwriteService, public loadingService: LoadingService) {}
-
-  ngOnInit(): void {
+  constructor(private api: ApiService, private appwrite: AppwriteService, public loadingService: LoadingService) {
     this.loadingService.show();
     this.api.products.findAll().subscribe(
       {
         next:(p: IProduct[]) => {
         this.products = p;
-        // Check this!
         },
         complete: () => {
-          this.loadingService.hide(); 
+          this.loadingService.hide();
         }
       }
     );

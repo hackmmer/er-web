@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddEditModalComponent } from './add-edit-modal/add-edit-modal.component';
@@ -8,6 +8,8 @@ import { ApiService } from '@services/api/api.service';
 import { ICategory, IIngredient, IProduct } from '@models/product';
 import { DataTableComponent } from '../../components/data-table/data-table.component';
 import { DeleteIdComponent } from './delete-id/delete-id.component';
+import { LoadingService } from '@services/loading.service';
+import { forkJoin, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -69,20 +71,29 @@ export class AdminComponent {
     { key: 'isAvailable', label: 'Disponible' },
     { key: 'preparationTime', label: 'Tiempo Preparación (min)' }]
 
-  constructor(private api:ApiService, private translate:TranslateService){
+  constructor(private api:ApiService, private translate:TranslateService, private loadingService: LoadingService){
     this.init_data()
   }
 
   init_data(){
-    this.api.category.findAll().subscribe(e=>{
-      this.categories=e
-    })
-    this.api.ingredients.findAll().subscribe(e=>{
-      this.ingredients=e
-    })
-    this.api.products.findAll().subscribe(e=>{
-      this.products=e
-    })
+    this.loadingService.show()
+    forkJoin({
+      categories: this.api.category.findAll(),
+      ingredients: this.api.ingredients.findAll(),
+      products: this.api.products.findAll()
+    }).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
+      next: (responses) => {
+        this.categories = responses.categories;
+        this.ingredients = responses.ingredients;
+        this.products = responses.products;
+      },
+      error: (e) => {
+        // Manejar errores aquí
+        console.error(e);
+      }
+    });
   }
   
   // Definimos los templates como propiedades públicas
