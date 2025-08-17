@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +8,8 @@ import { HeaderComponent } from '@components/header/header.component';
 import { LoadingService } from '@services/loading.service';
 import { LoadingModalComponent } from '@common/loading-modal/loading-modal.component';
 import { NotificationsComponent } from '@components/notifications/notifications.component';
+import { SEOService } from '@services/seo.service';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-root',
@@ -21,9 +23,15 @@ import { NotificationsComponent } from '@components/notifications/notifications.
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private readonly seo: SEOService = inject(SEOService);
+
   constructor(
     private translator: TranslationService,
     public loadingService: LoadingService
   ) {}
+
+  ngOnInit() {
+    this.seo.updateTags(environment.seo);
+  }
 }
