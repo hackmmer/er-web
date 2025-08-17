@@ -6,7 +6,7 @@ import { TranslationService } from '@common/i18n/translation.service';
 import { HeaderComponent } from '@components/header/header.component';
 
 import { LoadingService } from '@services/loading.service';
-import { LoadingModalComponent } from '@components/loading-modal/loading-modal.component';
+import { LoadingModalComponent } from '@common/loading-modal/loading-modal.component';
 import { NotificationsComponent } from '@components/notifications/notifications.component';
 
 @Component({
