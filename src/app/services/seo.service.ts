@@ -47,6 +47,8 @@ export class SEOService {
 
   updateOgImage(image: string) {
     this.meta.updateTag({ property: 'og:image', content: image });
+    this.meta.updateTag({ property: 'og:image:width', content: '1536' });
+    this.meta.updateTag({ property: 'og:image:height', content: '1024' });
     this.meta.updateTag({ name: 'twitter:image', content: image });
     this.meta.updateTag({
       name: 'twitter:card',
