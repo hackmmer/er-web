@@ -3,8 +3,8 @@ export const environment = {
   seo: {
     title: "Er'Caliente",
     desc: "♨️ ¿Bocatas CALIENTES que desafían lo aburrido? Er'Caliente: Bocatería urbana en Sevilla con sabor potente, nombres prohibidos y actitud sin filtro. ¡La Zona Caliente te espera! 🔥 Pide ya.",
-    url: '',
-    image: '',
+    url: 'https://er-web-p46u.onrender.com/',
+    image: 'https://er-web-p46u.onrender.com/assets/img/reseña2.jpg',
   },
   api: {
     host: 'https://ercaliente.onrender.com',

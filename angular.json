@@ -16,9 +16,7 @@
             "outputPath": "dist/web",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets",
@@ -27,9 +25,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": [],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -53,6 +49,17 @@
               ],
               "outputHashing": "all"
             },
+            "staging": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -72,6 +79,9 @@
           "configurations": {
             "production": {
               "buildTarget": "web:build:production"
+            },
+            "staging": {
+              "buildTarget": "web:build:staging"
             },
             "development": {
               "buildTarget": "web:build:development"
