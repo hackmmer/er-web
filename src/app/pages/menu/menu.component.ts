@@ -6,6 +6,7 @@ import { IProduct } from '@models/product';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ApiModule } from '@services/api/api.module';
 import { AppwriteService } from '@services/appwrite.service';
+import { LoadingService } from '@services/loading.service';
 
 @Component({
   selector: 'app-menu',
@@ -16,12 +17,20 @@ import { AppwriteService } from '@services/appwrite.service';
 export class MenuComponent implements OnInit {
   products: IProduct[] = [];
 
-  constructor(private api: ApiService, private appwrite: AppwriteService) {}
+  constructor(private api: ApiService, private appwrite: AppwriteService, public loadingService: LoadingService) {}
 
   ngOnInit(): void {
-    this.api.products.findAll().subscribe((p: IProduct[]) => {
-      this.products = p;
-    });
-
+    this.loadingService.show();
+    this.api.products.findAll().subscribe(
+      {
+        next:(p: IProduct[]) => {
+        this.products = p;
+        // Check this!
+        },
+        complete: () => {
+          this.loadingService.hide(); 
+        }
+      }
+    );
   }
 }

@@ -13,33 +13,44 @@ export class ThemeService {
   }
   
   /* THEMES HANDLERS */
-  getTheme() : string {
+  getTheme(): string {
     return this.currentTheme;
   }
 
-  toggleTheme() {
+  toggleTheme(): void {
     const next = this.currentTheme == ThemeEnum.THEME_LIGHT ? ThemeEnum.THEME_DARK : ThemeEnum.THEME_LIGHT;
-    this.setTheme(next); 
+    this.setTheme(next, true); 
   }
 
   /* PRIVATES */
-  private setTheme(theme: ThemeEnum) {
+  private setTheme(theme: ThemeEnum, persist: boolean): void {
     if (this.currentTheme == theme)
       return;
 
     this.currentTheme = theme;
-    localStorage?.setItem(this.storageKey, theme as string);
+    if (persist) {
+      localStorage?.setItem(this.storageKey, theme as string);
+    }
     document.documentElement.setAttribute('data-theme', theme as string);
   }
 
   private initTheme(): ThemeEnum {
-  if (typeof window !== 'undefined') {
-    try {
-      const stored = localStorage.getItem(this.storageKey) as ThemeEnum;
-      this.setTheme(stored);
-    } catch {}
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(this.storageKey) as ThemeEnum | null;
+        if (stored === ThemeEnum.THEME_DARK || stored === ThemeEnum.THEME_LIGHT) {
+          this.setTheme(stored, false);
+          return stored;
+        }
+
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const fallback = prefersDark ? ThemeEnum.THEME_DARK : ThemeEnum.THEME_LIGHT;
+        this.setTheme(fallback, false);
+        return fallback;
+      } catch {}
+    }
+
+    return ThemeEnum.THEME_LIGHT;
   }
-  return ThemeEnum.THEME_LIGHT;
-}
 
 }
