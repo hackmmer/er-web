@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddEditModalComponent } from './add-edit-modal/add-edit-modal.component';
@@ -6,16 +6,16 @@ import { AddEditIngredientsComponent } from './add-edit-ingredients/add-edit-ing
 import { AddEditCategoryComponent } from './add-edit-category/add-edit-category.component';
 import { ApiService } from '@services/api/api.service';
 import { ICategory, IIngredient, IProduct } from '@models/product';
-import { DataTableComponent } from '../../components/data-table/data-table.component';
+import { DataTableComponent } from '@components/data-table/data-table.component';
 import { DeleteIdComponent } from './delete-id/delete-id.component';
 
 @Component({
   selector: 'app-admin',
   imports: [
-    TranslatePipe, 
-    NgTemplateOutlet, 
+    TranslatePipe,
+    NgTemplateOutlet,
     AddEditModalComponent,
-    AddEditIngredientsComponent, 
+    AddEditIngredientsComponent,
     AddEditCategoryComponent,
     DataTableComponent,
     DeleteIdComponent,
@@ -24,7 +24,7 @@ import { DeleteIdComponent } from './delete-id/delete-id.component';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent {
-  
+
   sidebarOpen = false;
   activeItem = 'products';
 
@@ -32,7 +32,7 @@ export class AdminComponent {
   show_modal_ingredients=false;
   show_modal_category = false;
   show_modal_delete = false;
-  
+
   data_product: IProduct | null = null;
   data_delete: {id: string, title: string} | null = null;
   data_category: ICategory | null = null;
@@ -84,7 +84,7 @@ export class AdminComponent {
       this.products=e
     })
   }
-  
+
   // Definimos los templates como propiedades públicas
   @ViewChild('productsTemplate', { static: true }) productsTemplate!: TemplateRef<any>;
   @ViewChild('promosTemplate', { static: true }) promosTemplate!: TemplateRef<any>;

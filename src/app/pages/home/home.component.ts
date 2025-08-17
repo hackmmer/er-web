@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { FooterComponent } from '@components/footer/footer.component';
 import { TranslatePipe } from '@ngx-translate/core';
 
 

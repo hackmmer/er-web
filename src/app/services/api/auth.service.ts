@@ -56,7 +56,7 @@ export class AuthService extends BaseApi {
   }
 
   logOut() {
-    localStorage.removeItem(this.access_token_key)
+    localStorage.removeItem(this.access_token_key);
   }
 
   public getToken() {

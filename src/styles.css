@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark;
 }
+/* Force to complie these styles */
+@source inline("alert alert-outline alert-dash alert-soft alert-info alert-success alert-warning alert-error alert-vertical alert-horizontal opacity-0");
 
 @plugin "daisyui/theme" {
   name: "light";
@@ -23,7 +26,7 @@
   --color-neutral-content: oklch(92% 0.004 286.32);
   --color-info: oklch(70% 0.191 22.216);
   --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(82% 0.189 84.429);
+  --color-success: oklch(76% 0.177 163.223);
   --color-success-content: oklch(0% 0 0);
   --color-warning: oklch(55% 0.135 66.442);
   --color-warning-content: oklch(100% 0 0);
@@ -59,7 +62,7 @@
   --color-neutral-content: oklch(92% 0.004 286.32);
   --color-info: oklch(70% 0.191 22.216);
   --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(82% 0.189 84.429);
+  --color-success: oklch(76% 0.177 163.223);
   --color-success-content: oklch(0% 0 0);
   --color-warning: oklch(55% 0.135 66.442);
   --color-warning-content: oklch(100% 0 0);
@@ -76,10 +79,7 @@
 }
 
 
-body{
+body {
   background-color: var(--color-base-200);
   height: 100%;
 }
-
-
-

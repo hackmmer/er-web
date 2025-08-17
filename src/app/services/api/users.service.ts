@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base-api.class';
 import { IUser, UserUpdates } from '@models/user';
-import { AuthService } from './auth.service';
 import { Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -11,7 +10,7 @@ import { Observable, tap } from 'rxjs';
 export class UsersService extends BaseApi {
   public currentUser?: IUser;
 
-  constructor(http: HttpClient, private authService: AuthService) {
+  constructor(http: HttpClient) {
     super(http, 'users');
   }
 
@@ -47,7 +46,9 @@ export class UsersService extends BaseApi {
     });
   }
 
-  updateNotificationsChannels(data: UserUpdates.notificationChannels): Observable<IUser> {
+  updateNotificationsChannels(
+    data: UserUpdates.notificationChannels
+  ): Observable<IUser> {
     return this.patch<IUser>({
       endpoint: 'preferences/notification-channel',
       body: data,

@@ -7,11 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class ProductsService
-  extends BaseApi
-  implements CRUD<IProduct>
-{
-  
+export class ProductsService extends BaseApi implements CRUD<IProduct> {
   constructor(http: HttpClient) {
     super(http, 'products');
   }
@@ -25,19 +21,22 @@ export class ProductsService
   }
 
   create_product(data: IProductCreate) {
-    return this.post<IProductCreate>({ 
-      body: data
+    return this.post<IProductCreate>({
+      body: data,
     });
   }
 
-  update_product(id?: string, data?: IProductCreate): Observable<IProductCreate | any> {
+  update_product(
+    id?: string,
+    data?: IProductCreate
+  ): Observable<IProductCreate | any> {
     return this.patch<IProductCreate>({
-      endpoint:id,
-      body:data
-    })
+      endpoint: id,
+      body: data,
+    });
   }
 
   remove(id?: string): Observable<IProduct | any> {
-    return this.delete<IProduct>({endpoint:id});
+    return this.delete<IProduct>({ endpoint: id });
   }
 }

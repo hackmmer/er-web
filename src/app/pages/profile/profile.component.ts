@@ -6,16 +6,11 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsersService } from '@services/api/users.service';
-import { Observable, take } from 'rxjs';
-import {
-  IUser,
-  IUserNotificationChannels,
-  notificationChannelsEnum,
-} from '@models/user';
+import { Observable } from 'rxjs';
+import { IUser, notificationChannelsEnum } from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
 
 class BaseEditState {
@@ -118,20 +113,18 @@ export class ProfileComponent implements OnInit {
     const phoneControl = this.form.get('personalInfo.phone');
     this.handleControl(phoneControl, false);
 
-    this.usersService
-      .updateUserPhone(phoneControl?.value)
-      .subscribe({
-        next: (updatedUser) => {
-          this.user.set(updatedUser);
-          this.phoneState.reset();
-          this.handleControl(phoneControl, true);
-        },
-        error: (err) => {
-          this.handleControl(phoneControl, true);
-          this.phoneState.setError(err.error.message[0]);
-          // console.error('Update phone error:', err);                 // Just for debug
-        }
-      });
+    this.usersService.updateUserPhone(phoneControl?.value).subscribe({
+      next: (updatedUser) => {
+        this.user.set(updatedUser);
+        this.phoneState.reset();
+        this.handleControl(phoneControl, true);
+      },
+      error: (err) => {
+        this.handleControl(phoneControl, true);
+        this.phoneState.setError(err.error.message[0]);
+        // console.error('Update phone error:', err);                 // Just for debug
+      },
+    });
   }
   /* END HANDLE PHONE NUMBER */
 
@@ -187,10 +180,13 @@ export class ProfileComponent implements OnInit {
       personalInfo: this.fb.group({
         firstName: this.fb.control(user?.firstName || '', []),
         lastName: this.fb.control(user?.lastName || '', []),
-        phone: this.fb.control({
-          value: user?.phone || '',
-          disabled: !this.phoneState.isEditing
-        }, [])
+        phone: this.fb.control(
+          {
+            value: user?.phone || '',
+            disabled: !this.phoneState.isEditing,
+          },
+          []
+        ),
       }),
       dietaryPreferences: this.fb.array([], []),
       notificationChannels: this.fb.group({
