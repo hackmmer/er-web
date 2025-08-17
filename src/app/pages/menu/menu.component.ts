@@ -26,8 +26,10 @@ export class MenuComponent implements OnInit {
         next:(p: IProduct[]) => {
         this.products = p;
         // Check this!
-        this.loadingService.hide(); 
-        },   
+        },
+        complete: () => {
+          this.loadingService.hide(); 
+        }
       }
     );
   }
