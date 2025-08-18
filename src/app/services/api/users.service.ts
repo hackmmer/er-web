@@ -54,4 +54,14 @@ export class UsersService extends BaseApi {
       body: data,
     });
   }
+
+  updateDietaryPreferences(preferences: string[]): Observable<IUser> {
+    console.log(preferences);
+    return this.patch<IUser>({
+      endpoint: 'preferences/dietary',
+      body:{ 
+        dietaryPreferences: preferences
+      }
+    });
+}
 }
