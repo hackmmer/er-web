@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -12,6 +13,7 @@ import { UsersService } from '@services/api/users.service';
 import { Observable } from 'rxjs';
 import { IUser, notificationChannelsEnum } from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
+import { DietaryPreferencesModalComponent } from '../../modals/dietary-preferences/dietary-preferences.component';
 
 class BaseEditState {
   isEditing: boolean = false;
@@ -42,7 +44,7 @@ class BaseEditState {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ProfilePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ProfilePipe, DietaryPreferencesModalComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
@@ -52,6 +54,12 @@ export class ProfileComponent implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
 
   user = signal<IUser | undefined>(undefined);
+  dietaryModalOpen = signal(false);
+  allDietaryPreferences = [
+    'Vegetariano', 'Vegano', 'Sin gluten', 'Sin lactosa', 
+    'Keto', 'Paleo', 'Bajo en sodio', 'Pescetariano',
+    'Sin nueces', 'Bajo en carbohidratos', 'Sin mariscos'
+  ];
   phoneState: BaseEditState = new BaseEditState();
 
   form!: FormGroup;
@@ -67,7 +75,6 @@ export class ProfileComponent implements OnInit {
 
   submit(section: string) {
     const data = this.form.get(section)?.getRawValue();
-    console.log(data);
     switch (section) {
       case 'profileImage':
         this.usersService
@@ -80,7 +87,9 @@ export class ProfileComponent implements OnInit {
           .subscribe((e) => this._afterUpdate(e, section));
         return;
       case 'dietaryPreferences':
-        console.log('Not Implemented Yet');
+        const preferences = data as string[];
+        this.usersService.updateDietaryPreferences(preferences)
+          .subscribe(updatedUser => this._afterUpdate(updatedUser, section));
         return;
       case 'notificationChannels':
         this.usersService
@@ -128,7 +137,26 @@ export class ProfileComponent implements OnInit {
   }
   /* END HANDLE PHONE NUMBER */
 
-  /* HANDLE EMAIL */
+  /* HANDLE DIETARY PREFERENCES */
+  openDietaryPreferencesModal(): void {
+    this.dietaryModalOpen.set(true);
+  }
+  
+  saveDietaryPreferences(preferences: string[]): void {
+    this.updateDietaryPreferencesInForm(preferences);
+    this.dietaryModalOpen.set(false);
+    this.submit('dietaryPreferences');
+  }
+
+  private updateDietaryPreferencesInForm(preferences: string[]): void {
+    const dietaryArray = this.form.get('dietaryPreferences') as FormArray;
+    dietaryArray.clear();
+    preferences.forEach(preference => {
+      dietaryArray.push(this.fb.control(preference));
+    });
+    dietaryArray.markAsDirty();
+  }
+  /* END DIETARY PREFERENCES */
 
   /* HANDLE NOTIFICATION CHANNELS */
 
@@ -202,7 +230,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private _afterUpdate(r: IUser, section: string) {
-    console.log(r);
+    console.log(r);                                   // Just remember commet this later...
     this.user.set(r);
     this.form.get(section)?.markAsUntouched();
     this.form.get(section)?.markAsPristine();

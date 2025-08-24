@@ -109,24 +109,29 @@
         <label class="label font-bold text-secondary m-0"
           >Preferencias Dietéticas</label
         >
-        <button class="btn btn-sm btn-outline btn-primary">
+        <button 
+          class="btn btn-sm btn-outline btn-primary"
+          (click)="openDietaryPreferencesModal()">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 mr-1"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
+            xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 5v14m7-7H5" />
           </svg>
           Editar
         </button>
       </div>
 
+      <app-dietary-preferences-modal
+        [isOpen]="dietaryModalOpen()"
+        [allPreferences]="allDietaryPreferences"
+        [userPreferences]="user.dietaryPreferences"
+        (close)="dietaryModalOpen.set(false)"
+        (save)="saveDietaryPreferences($event)">
+      </app-dietary-preferences-modal>
+
       <div class="flex flex-wrap gap-2 font-medium">
         @if (user.dietaryPreferences.length > 0) {
           @for (preference of user.dietaryPreferences; track $index) {
-            <div class="badge" [ngClass]="$index % 2 === 0 ? 'badge-accent' : 'badge-secondary'">
+            <div class="badge outline" [ngClass]="$index % 2 === 0 ? 'badge-outline badge-accent' : 'badge-outline badge-secondary'">
               {{ preference }}
             </div>
           }
