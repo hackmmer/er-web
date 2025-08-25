@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   AbstractControl,
   FormArray,
@@ -14,6 +14,8 @@ import { Observable } from 'rxjs';
 import { IUser, notificationChannelsEnum } from '@models/user';
 import { ProfilePipe } from '@pipes/profile.pipe';
 import { DietaryPreferencesModalComponent } from '../../modals/dietary-preferences/dietary-preferences.component';
+import { AppwriteService } from '@services/appwrite.service';
+import { Models } from 'node-appwrite';
 
 class BaseEditState {
   isEditing: boolean = false;
@@ -44,21 +46,40 @@ class BaseEditState {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ProfilePipe, DietaryPreferencesModalComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ProfilePipe,
+    DietaryPreferencesModalComponent,
+    NgOptimizedImage,
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   private readonly usersService: UsersService = inject(UsersService);
+  private readonly appwrite: AppwriteService = inject(AppwriteService);
   private readonly router: Router = inject(Router);
   private readonly fb: FormBuilder = inject(FormBuilder);
 
+  readonly profileImageLoadin = signal<boolean>(false);
+  readonly lastFile = signal<Models.File | null>(null);
+  readonly actualImage = signal<string | null>(null);
   user = signal<IUser | undefined>(undefined);
   dietaryModalOpen = signal(false);
   allDietaryPreferences = [
-    'Vegetariano', 'Vegano', 'Sin gluten', 'Sin lactosa', 
-    'Keto', 'Paleo', 'Bajo en sodio', 'Pescetariano',
-    'Sin nueces', 'Bajo en carbohidratos', 'Sin mariscos'
+    'Vegetariano',
+    'Vegano',
+    'Sin gluten',
+    'Sin lactosa',
+    'Keto',
+    'Paleo',
+    'Bajo en sodio',
+    'Pescetariano',
+    'Sin nueces',
+    'Bajo en carbohidratos',
+    'Sin mariscos',
   ];
   phoneState: BaseEditState = new BaseEditState();
 
@@ -78,7 +99,7 @@ export class ProfileComponent implements OnInit {
     switch (section) {
       case 'profileImage':
         this.usersService
-          .updateProfileImage(data)
+          .updateProfileImage({profileImage: data})
           .subscribe((e) => this._afterUpdate(e, section));
         return;
       case 'personalInfo':
@@ -88,8 +109,9 @@ export class ProfileComponent implements OnInit {
         return;
       case 'dietaryPreferences':
         const preferences = data as string[];
-        this.usersService.updateDietaryPreferences(preferences)
-          .subscribe(updatedUser => this._afterUpdate(updatedUser, section));
+        this.usersService
+          .updateDietaryPreferences(preferences)
+          .subscribe((updatedUser) => this._afterUpdate(updatedUser, section));
         return;
       case 'notificationChannels':
         this.usersService
@@ -97,6 +119,32 @@ export class ProfileComponent implements OnInit {
           .subscribe((e) => this._afterUpdate(e, section));
         return;
     }
+  }
+
+  async onFileSelected(event: Event) {
+    const fileInput: HTMLInputElement = event.target as HTMLInputElement; // Here we use only the first file (single file)
+    if (!fileInput.files || !fileInput.files[0].type.startsWith('image/'))
+      return;
+    const file = fileInput.files[0];
+    this.appwrite.fileCreated.subscribe((f) => {
+      this.lastFile.set(f);
+      this.actualImage.set(this.appwrite.getFileViewUrl(f.$id));
+
+      this.form.get('profileImage')?.patchValue(this.actualImage());
+      this.form.get('profileImage')?.markAsDirty();
+      this.profileImageLoadin.set(false);
+    });
+
+    // Upload progress never called (Why?)
+    // take a look in future changes
+    //
+    this.appwrite.uploadProgress.subscribe((u) => {
+      console.log(u);
+    });
+    const last = this.lastFile();
+    if (last && last?.$id) await this.appwrite.deleteFile(last.$id);
+    this.profileImageLoadin.set(true);
+    this.appwrite.createFile(file);
   }
 
   sendToHome(): void {
@@ -141,7 +189,7 @@ export class ProfileComponent implements OnInit {
   openDietaryPreferencesModal(): void {
     this.dietaryModalOpen.set(true);
   }
-  
+
   saveDietaryPreferences(preferences: string[]): void {
     this.updateDietaryPreferencesInForm(preferences);
     this.dietaryModalOpen.set(false);
@@ -151,7 +199,7 @@ export class ProfileComponent implements OnInit {
   private updateDietaryPreferencesInForm(preferences: string[]): void {
     const dietaryArray = this.form.get('dietaryPreferences') as FormArray;
     dietaryArray.clear();
-    preferences.forEach(preference => {
+    preferences.forEach((preference) => {
       dietaryArray.push(this.fb.control(preference));
     });
     dietaryArray.markAsDirty();
@@ -230,7 +278,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private _afterUpdate(r: IUser, section: string) {
-    console.log(r);                                   // Just remember commet this later...
+    console.log(r); // Just remember commet this later...
     this.user.set(r);
     this.form.get(section)?.markAsUntouched();
     this.form.get(section)?.markAsPristine();

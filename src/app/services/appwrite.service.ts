@@ -10,7 +10,6 @@ import {
 } from 'appwrite';
 import { Subject } from 'rxjs';
 import { environment } from '@env/environment';
-import { Buffer } from 'buffer';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +23,7 @@ export class AppwriteService {
   private readonly client: Client;
   private readonly storage: Storage;
   private readonly avatars: Avatars;
+  private readonly account: Account;
 
   public fileCreated = new Subject<Models.File>();
   public uploadProgress = new Subject<UploadProgress>();
@@ -36,6 +36,19 @@ export class AppwriteService {
       .setDevKey(this.APIKEY);
 
     // Init Services
+    this.account = new Account(this.client);
+    this.account
+      .get()
+      .then((v) => {})
+      .catch((err) => {
+        this.account
+          .createEmailPasswordSession('admin@ercaliente.com', '4UP:~Z8~C+2R#^z')
+          .then((v) => {
+            console.log(v);
+          })
+          .catch((err) => {});
+      });
+
     this.storage = new Storage(this.client);
     this.avatars = new Avatars(this.client);
   }

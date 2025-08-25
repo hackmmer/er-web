@@ -7,15 +7,31 @@
     <!-- Avatar -->
     <div class="flex items-center gap-6">
       <div class="avatar">
+        @let profileImageLoading = profileImageLoadin();
         <div
-          class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+          class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 z-1 relative"
         >
-          <img [alt]="user.firstName" [src]="user | profile" />
+          <img [alt]="user.firstName" priority fill [ngSrc]="actualImage() || (user | profile)" />
+          <div class="transition-all opacity-0 duration-350 absolute w-full h-full flex" [ngClass]="{
+            'hover:opacity-100! hover:bg-black/75': !profileImageLoading,
+            'opacity-100! bg-black/75': profileImageLoading
+          }">
+            @if(!profileImageLoading){
+              <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-1/2 top-1/2 -translate-1/2 h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+              </svg>
+              <input (change)="onFileSelected($event)" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer file:hidden file:mr-4 file:rounded-full">
+            } @else {
+              <span class="absolute left-1/2 top-1/2 -translate-1/2 h-10 w-10 loading loading-spinner loading-xs"></span>
+            }
+          </div>
         </div>
+
       </div>
 
       <!-- User Info -->
-      <div>
+      <div class="w-full">
         <h2 class="text-3xl font-bold text-base-content">{{ user.firstName }}</h2>
         <p class="text-sm text-base-content/70">{{ user.email }}</p>
 
@@ -68,6 +84,13 @@
           }
         </div>
       </div>
+      @if(form.get('profileImage')?.dirty) {
+        <div class="">
+          <button class="btn right-0 w-32" (click)="submit('profileImage')" type="button">
+            Actualizar
+          </button>
+        </div>
+      }
     </div>
 
     <!-- Personal Info -->
@@ -109,7 +132,7 @@
         <label class="label font-bold text-secondary m-0"
           >Preferencias Dietéticas</label
         >
-        <button 
+        <button
           class="btn btn-sm btn-outline btn-primary"
           (click)="openDietaryPreferencesModal()">
           <svg
